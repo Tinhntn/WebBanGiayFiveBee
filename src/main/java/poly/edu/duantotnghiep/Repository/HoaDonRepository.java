@@ -8,7 +8,7 @@ import poly.edu.duantotnghiep.Model.HoaDon;
 import java.util.List;
 import java.util.UUID;
 @Repository
-public interface HoaDonRepository extends JpaRepository<UUID, HoaDon> {
+public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
     @Query(value = "select * from hoadon",nativeQuery = true)
     List<HoaDon> getAllHoaDon();
 }

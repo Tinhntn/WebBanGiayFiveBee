@@ -6,27 +6,26 @@ import lombok.*;
 import java.util.Date;
 import java.util.UUID;
 
-@Table(name = "hoadon")
+@Table(name = "giohang")
 @Entity
+@Data
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class HoaDon {
+@NoArgsConstructor
+
+public class GioHang {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-    private String mahoadon;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private UUID idgiohang;
     private String idnhanvien;
     private String idkhachhang;
-    private Date ngaymua;
-    private Float thanhtien;
     private String idkhuyenmai;
-    private String ghichu;
+    private String magiohang;
+    private Date ngaymua;
     private Date ngaytao;
     private Date ngaysua;
-    private Float tongtien;
-    private Float tongtiengiam;
     private int trangthai;
+    private String ghichu;
+
 }
