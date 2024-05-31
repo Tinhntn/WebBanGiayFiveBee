@@ -20,13 +20,15 @@ public class HoaDon {
     private String mahoadon;
     private String idnhanvien;
     private String idkhachhang;
+    @Temporal(TemporalType.DATE)
     private Date ngaymua;
     private Float thanhtien;
     private String idkhuyenmai;
     private String ghichu;
+    @Temporal(TemporalType.DATE)
     private Date ngaytao;
+    @Temporal(TemporalType.DATE)
     private Date ngaysua;
-    private Float tongtien;
     private Float tongtiengiam;
     private int trangthai;
 }

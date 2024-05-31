@@ -11,4 +11,9 @@ import java.util.UUID;
 public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
     @Query(value = "select * from hoadon",nativeQuery = true)
     List<HoaDon> getAllHoaDon();
+
+    @Query(value = "select * from hoadon where trangthai = 0",nativeQuery = true)
+    List<HoaDon> findHoaDonByTrangThai();
+
+
 }

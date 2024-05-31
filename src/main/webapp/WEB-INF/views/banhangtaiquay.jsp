@@ -12,20 +12,40 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+<script>
+
+
+
+</script>
 <body>
 
 <H2>Bán hàng tại quầy</H2>
 <br>
 <div class= "container-fluid">
     <%-- Dong 1--%>
-    <div class= "row">
-        <div class ="col-7 bg-primary">
-            <p>Tao hoa don cho</p>
+    <div class= "row" >
+        <form action="/banhangtaiquay/taoHoaDon" method="post" class="col-7">
+            <c:if test="${error != null}">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>${error}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </c:if>
+            <button type="submit" class="btn btn-outline-info">Tạo hóa đơn</button><br><br>
+            <c:forEach var="hd" items="${listMaHoaDon}">
+                <button type="button" class="btn " style="background-color: antiquewhite;text-align: center">
+                    <div>  ${hd.mahoadon}
+                        <a href="/banhangtaiquay/deletehdc/${hd.id}"  class="btn btn-outline-primary"
+                           style="font-size: 8px; margin-left: 10px" onclick="return confirm('bạn có chắc chắn muốn hủy hóa đơn này')">X</a>
+                    </div>
+              </button>
+            </c:forEach>
+        </form>
 
-        </div>
         <div class ="col-5 bg-success">
             <p>Chi tiet thanh toan</p>
         </div>
+
     </div>
 
     <%-- Dong 2 --%>
