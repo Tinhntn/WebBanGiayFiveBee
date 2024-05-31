@@ -1,5 +1,6 @@
 package poly.edu.duantotnghiep.Service.Iml;
 
+import poly.edu.duantotnghiep.DAO.HoaDonDAOCustom;
 import poly.edu.duantotnghiep.Model.HoaDon;
 import poly.edu.duantotnghiep.Repository.HoaDonRepository;
 import poly.edu.duantotnghiep.Service.HoaDonService;
@@ -13,7 +14,7 @@ public class HoaDonIml implements HoaDonService {
     @Autowired
     HoaDonRepository hoaDonRepository;
     @Override
-    public List<HoaDon> getAllHoaDon() {
-        return hoaDonRepository.getAllHoaDon();
+    public List<HoaDonDAOCustom> getAllHoaDon() {
+        return hoaDonRepository.getHoaDonDAO();
     }
 }

@@ -45,42 +45,7 @@
 <div class= "row">
     <div class ="col-7 bg-Warning">
         <%-- Hien thi danh sach san pham o day --%>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Tên sản phẩm</th>
-                    <th scope="col">Hãng</th>
-                    <th scope="col">Size</th>
-                    <th scope="col">Danh mục</th>
-                    <th scope="col">Chất liệu</th>
-                    <th scope="col">Màu sắc</th>
-                    <th scope="col">Khuyến mãi</th>
-                    <th scope="col">QR</th>
-                    <th scope="col">Hình ảnh</th>
-                    <th scope="col">Số lượng</th>
-                    <th scope="col">Mô tả</th>
-                    <th scope="col">Trạng thái</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${lstCTSP}" var="lst">
-                    <tr>
-                        <td>${lst.tenSanPham}</td>
-                        <td>${lst.tenHang}</td>
-                        <td>${lst.tenSize}</td>
-                        <td>${lst.tenDanhMuc}</td>
-                        <td>${lst.tenChatLieu}</td>
-                        <td>${lst.tenMauSac}</td>
-                        <td>${lst.tenKhuyenMai}</td>
-                        <td>${lst.QR}</td>
-                        <td><img src="${lst.hinhAnh}" alt="Image" style="width:100px;height:100px;"/>${lst.hinhAnh}</td>
-                        <td>${lst.soLuong}</td>
-                        <td>${lst.moTa}</td>
-                        <td>${lst.trangThai}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+        <p>danh sach san pham</p>
     </div>
     <div class ="col-5 bg-success">
         <p>col-7</p>
