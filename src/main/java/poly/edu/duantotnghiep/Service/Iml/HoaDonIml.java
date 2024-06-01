@@ -1,7 +1,11 @@
 package poly.edu.duantotnghiep.Service.Iml;
 
+<<<<<<< HEAD
 import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
 import poly.edu.duantotnghiep.Model.ChiTietSanPham;
+=======
+import poly.edu.duantotnghiep.DAO.HoaDonDAOCustom;
+>>>>>>> 251681b45cf1ae81cf7964a04672666a8f57dc33
 import poly.edu.duantotnghiep.Model.HoaDon;
 import poly.edu.duantotnghiep.Repository.ChiTietSanPhamRepository;
 import poly.edu.duantotnghiep.Repository.HoaDonRepository;
@@ -21,8 +25,8 @@ public class HoaDonIml implements HoaDonService {
     @Autowired
     ChiTietSanPhamRepository chiTietSanPhamRepository;
     @Override
-    public List<HoaDon> getAllHoaDon() {
-        return hoaDonRepository.getAllHoaDon();
+    public List<HoaDonDAOCustom> getAllHoaDon() {
+        return hoaDonRepository.getHoaDonDAO();
     }
 
 

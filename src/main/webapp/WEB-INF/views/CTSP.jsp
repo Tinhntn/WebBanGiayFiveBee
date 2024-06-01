@@ -45,44 +45,7 @@
 <div class= "row">
     <div class ="col-7 bg-Warning">
         <%-- Hien thi danh sach san pham o day --%>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Mã hóa đơn</th>
-                    <th scope="col">Tên nhân vien</th>
-                    <th scope="col">Tên khách hàng</th>
-                    <th scope="col">Ngày mua</th>
-                    <th scope="col">Thành tiền</th>
-                    <th scope="col">Khuyến mãi</th>
-                    <th scope="col">Ghi chú</th>
-                    <th scope="col">Ngày Tạo</th>
-                    <th scope="col">Ngày sửa</th>
-                    <th scope="col">Tổng tiền</th>
-                    <th scope="col">Tổng tiền giảm</th>
-                    <th scope="col">Trạng thái</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${lstHoaDon}" var="lstHoaDon">
-
-                    <tr>
-                        <td>${lstHoaDon.mahoadon}</td>
-                        <td>${lstHoaDon.tennhanvien}</td>
-                        <td>${lstHoaDon.tenkhachhang}</td>
-                        <td>${lstHoaDon.ngaymua}</td>
-                        <td>${lstHoaDon.thanhtien}</td>
-                        <td>${lstHoaDon.giatri}</td>
-                        <td>${lstHoaDon.ghichu}</td>
-                        <td>${lstHoaDon.ngaytao}</td>
-                        <td>${lstHoaDon.ngaysua}</td>
-                        <td>${lstHoaDon.tongtien}</td>
-                        <td>${lstHoaDon.tongtiengiam}</td>
-                        <td>${lstHoaDon.trangthai}</td>
-                        <td>${lstHoaDon.tienkhachdua}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+        <p>danh sach san pham</p>
     </div>
     <div class ="col-5 bg-success">
         <p>col-7</p>

@@ -29,6 +29,11 @@ public class HoaDon {
     private Date ngaytao;
     @Temporal(TemporalType.DATE)
     private Date ngaysua;
+<<<<<<< HEAD
+=======
+    private Float tongtien;
+    private Float tienkhachdua;
+>>>>>>> 251681b45cf1ae81cf7964a04672666a8f57dc33
     private Float tongtiengiam;
     private int trangthai;
 }

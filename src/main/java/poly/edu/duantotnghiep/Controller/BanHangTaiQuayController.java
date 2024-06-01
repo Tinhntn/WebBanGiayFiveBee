@@ -1,6 +1,7 @@
 package poly.edu.duantotnghiep.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+<<<<<<< HEAD
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,18 @@ import poly.edu.duantotnghiep.Model.ChiTietSanPham;
 import poly.edu.duantotnghiep.Model.HoaDon;
 import poly.edu.duantotnghiep.Repository.HoaDonRepository;
 import poly.edu.duantotnghiep.Service.HoaDonService;
+=======
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import poly.edu.duantotnghiep.DAO.ChiTieSanPhamCustom;
+import poly.edu.duantotnghiep.Model.ChiTietSanPham;
+import poly.edu.duantotnghiep.Model.HoaDon;
+import poly.edu.duantotnghiep.Service.ChiTietSanPhamService;
+>>>>>>> 251681b45cf1ae81cf7964a04672666a8f57dc33
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +30,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/banhangtaiquay")
 public class BanHangTaiQuayController {
+<<<<<<< HEAD
     HoaDonRepository hoaDonRepository;
     @Autowired
    private HoaDonService hoaDonService;
@@ -24,6 +38,20 @@ public class BanHangTaiQuayController {
     public String bhtq(Model model){
         List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
         model.addAttribute("listMaHoaDon", list);
+=======
+    @Autowired
+    ChiTietSanPhamService chiTietSanPhamService;
+    @GetMapping("/hienthi")
+    public String bhtq(Model model, @RequestParam(defaultValue = "0") int page){
+
+        int size = 2;
+        Page<ChiTieSanPhamCustom> CTSP = chiTietSanPhamService.phanTrang(page,size);
+        model.addAttribute("CTSP",CTSP.getContent());
+        model.addAttribute("currentPage",page);
+        model.addAttribute("totalPages",CTSP.getTotalPages());
+//        List<ChiTieSanPhamCustom> lst = chiTietSanPhamService.getAllCTSP();
+//        model.addAttribute("lstCTSP",lst);
+>>>>>>> 251681b45cf1ae81cf7964a04672666a8f57dc33
         return "banhangtaiquay";
     }
         @PostMapping("/taoHoaDon")
