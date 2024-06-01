@@ -12,11 +12,11 @@ import java.util.UUID;
 public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
     @Query(value = "select * from hoadon",nativeQuery = true)
     List<HoaDon> getAllHoaDon();
-<<<<<<< HEAD
+
 
     @Query(value = "select * from hoadon where trangthai = 0",nativeQuery = true)
     List<HoaDon> findHoaDonByTrangThai();
-=======
+
     @Query(value = "SELECT hoadon.id as idhoadon,hoadon.mahoadon, nhanvien.hovaten AS tennhanvien, khachhang.tenkhachhang\n" +
             ",hoadon.ngaymua,hoadon.thanhtien,khuyenmai.giatri,hoadon.GhiChu,hoadon.ngaytao,hoadon.ngaysua\n" +
             ",hoadon.tongtien,hoadon.tongtiengiam,hoadon.trangthai,hoadon.tienkhachdua\n" +
@@ -26,7 +26,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
             "join khuyenmai on hoadon.idKhuyenMai = khuyenmai.id\n",nativeQuery = true
             )
     List<HoaDonDAOCustom> getHoaDonDAO();
->>>>>>> 251681b45cf1ae81cf7964a04672666a8f57dc33
+
 
 
 }

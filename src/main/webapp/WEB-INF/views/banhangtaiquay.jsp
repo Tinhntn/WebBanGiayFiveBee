@@ -29,46 +29,52 @@
 <H2>Bán hàng tại quầy</H2>
 <br>
 <div class="container-fluid">
+
+
     <%-- Dong 1--%>
-<<<<<<< HEAD
+
     <div class= "row" >
         <form action="/banhangtaiquay/taoHoaDon" method="post" class="col-7">
             <c:if test="${error != null}">
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <div id="errorAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
                     <strong>${error}</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
+
+            <script type="text/javascript">
+                // Sau 5 giây, ẩn thông báo lỗi
+                setTimeout(function() {
+                    var errorAlert = document.getElementById('errorAlert');
+                    if (errorAlert) {
+                        errorAlert.classList.add('fade');
+                        errorAlert.style.display = 'none';
+                    }
+                }, 5000); // 5000 milliseconds = 5 giây
+            </script>
+
+
             <button type="submit" class="btn btn-outline-info">Tạo hóa đơn</button><br><br>
             <c:forEach var="hd" items="${listMaHoaDon}">
                 <button type="button" class="btn " style="background-color: antiquewhite;text-align: center">
                     <div>  ${hd.mahoadon}
-                        <a href="/banhangtaiquay/deletehdc/${hd.id}"  class="btn btn-outline-primary"
+                        <a href="/banhangtaiquay/deletehdc/${hd.id}" methods="post" class="btn btn-outline-primary"
                            style="font-size: 8px; margin-left: 10px" onclick="return confirm('bạn có chắc chắn muốn hủy hóa đơn này')">X</a>
+
                     </div>
               </button>
             </c:forEach>
         </form>
 
         <div class ="col-5 bg-success">
-=======
-    <div class="row">
-        <hr>
-        <br>
-        <div class="col-7">
-            <button type="button" class="btn btn-primary">Tạo hóa đơn chờ</button>
         </div>
-        <div class="col-5 bg-light">
->>>>>>> 251681b45cf1ae81cf7964a04672666a8f57dc33
-            <p>Chi tiet thanh toan</p>
-        </div>
-
     </div>
+        <hr>
 
-    <%-- Dong 2 --%>
+
+    <%-- Dong 2 chi tiet hoa don--%>
     <div class="row">
-
-        <div class="col-7 bg-secondary">
+        <div class="col-7 ">
             <%-- Hien thi danh sach gio hang ow day --%>
             <p>Danhh sachs gio hang</p>
         </div>
@@ -77,9 +83,9 @@
         </div>
     </div>
 </div>
+<hr>
 
-
-<%-- Dong 3 --%>
+<%-- Dong 3 danh sach san pham--%>
 <div class="row">
     <div class="col-7 bg-white">
         <%-- Hien thi danh sach san pham o day --%>
@@ -92,7 +98,6 @@
                 <th scope="col">Danh mục</th>
                 <th scope="col">Chất liệu</th>
                 <th scope="col">Màu sắc</th>
-                <th scope="col">Khuyến mãi</th>
                 <th scope="col">QR</th>
                 <th scope="col">Hình ảnh</th>
                 <th scope="col">Số lượng</th>
@@ -109,7 +114,7 @@
                     <td>${lst.tenDanhMuc}</td>
                     <td>${lst.tenChatLieu}</td>
                     <td>${lst.tenMauSac}</td>
-                    <td>${lst.tenKhuyenMai}</td>
+
                     <td>${lst.QR}</td>
                     <td><img src="${lst.hinhAnh}" alt="Image" style="width:100px;height:100px;"/></td>
                     <td>${lst.soLuong}</td>
@@ -122,19 +127,19 @@
             <div class="pagination">
                 <!-- Link to the previous page -->
                 <button type="button" class="btn btn-primary" ${currentPage == 0 ? 'disabled' : ''}
-                        onclick="window.location.href='/banhangtaiquay/hienthi?page=${currentPage - 1}'">
+                        onclick="window.location.href='/banhangtaiquay/taoHoaDon?page=${currentPage - 1}'">
                   <<
                 </button>
 
                 <!-- Links to individual pages -->
                 <c:forEach var="i" begin="0" end="${totalPages - 1}">
                     <button type="button" class="btn btn-dark ${i == currentPage ? 'current-page' : ''}"
-                            onclick="window.location.href='/banhangtaiquay/hienthi?page=${i}'">${i + 1}</button>
+                            onclick="window.location.href='/banhangtaiquay/taoHoaDon?page=${i}'">${i + 1}</button>
                 </c:forEach>
 
                 <!-- Link to the next page -->
                 <button type="button" class="btn btn-primary" ${currentPage == totalPages - 1 ? 'disabled' : ''}
-                        onclick="window.location.href='/banhangtaiquay/hienthi?page=${currentPage + 1}'">
+                        onclick="window.location.href='/banhangtaiquay/taoHoaDon?page=${currentPage + 1}'">
                     >>
                 </button>
             </div>

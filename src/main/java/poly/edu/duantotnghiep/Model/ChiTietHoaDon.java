@@ -17,8 +17,8 @@ public class ChiTietHoaDon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
-    private String idhoadon;
-    private String idchitietsanpham;
+    private UUID idhoadon;
+    private UUID idchitietsanpham;
     private int soluong;
     private Float dongia;
     private Date ngayban;
