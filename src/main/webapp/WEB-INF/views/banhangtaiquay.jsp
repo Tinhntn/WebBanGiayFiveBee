@@ -34,6 +34,7 @@
     <%-- Dong 1--%>
 
     <div class= "row" >
+        <div class="col-8 ">
         <form action="/banhangtaiquay/taoHoaDon" method="post" class="col-7">
             <c:if test="${error != null}">
                 <div id="errorAlert" class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -54,41 +55,95 @@
             </script>
 
 
-            <button type="submit" class="btn btn-outline-info">Tạo hóa đơn</button><br><br>
-            <c:forEach var="hd" items="${listMaHoaDon}">
-                <button type="button" class="btn " style="background-color: antiquewhite;text-align: center">
-                    <div>  ${hd.mahoadon}
-                        <a href="/banhangtaiquay/deletehdc/${hd.id}" methods="post" class="btn btn-outline-primary"
-                           style="font-size: 8px; margin-left: 10px" onclick="return confirm('bạn có chắc chắn muốn hủy hóa đơn này')">X</a>
-
-                    </div>
-              </button>
-            </c:forEach>
+            <button type="submit" class="btn btn-outline-info">Tạo hóa đơn</button>
         </form>
 
-        <div class ="col-5 bg-success">
+        </div>
+        <div class ="col-4 ">
+          <h2>Thông tin hóa đơn</h2>
+        </div>
+
+        <div class="col-8 ">
+        <span>
+            <c:forEach var="hd" items="${listMaHoaDon}">
+                <a  href="/banhangtaiquay/detailhd/${hd.id}" methods="get" class="btn " style="background-color: antiquewhite;  ">
+                   ${hd.mahoadon}
+                        <a href="/banhangtaiquay/deletehdc/${hd.id}" methods="post" class="btn btn-outline-primary"
+                           style="font-size: 13px; margin-right: 20px" onclick="return confirm('bạn có chắc chắn muốn hủy hóa đơn này')">X</a>
+              </a>
+            </c:forEach>
+                   </span>
+
+    </div>
+
+        <div class ="col-4 ">
+
+            <div>Khách hàng <input type="text"  value="${hoadon.mahoadon}"></div>
+            <div>Khách hàng <input type="text"  value="${hoadon.id}"></div>
         </div>
     </div>
         <hr>
 
 
     <%-- Dong 2 chi tiet hoa don--%>
-    <div class="row">
-        <div class="col-7 ">
-            <%-- Hien thi danh sach gio hang ow day --%>
-            <p>Danhh sachs gio hang</p>
+        <div class="row">
+            <div class="col-8 ">
+                <%-- Hien thi danh sach gio hang ow day --%>
+                <h3>Giỏ hàng</h3>
+                <table class="table table-header">
+                    <thead>
+                    <tr>
+
+                        <th>Tên sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Hình ảnh</th>
+                        <th>Size</th>
+                        <th>Hãng</th>
+                        <th>Chất liệu</th>
+                        <th>Màu sắc</th>
+                        <th>Danh mục</th>
+                        <th>Trạng thái</th>
+                        <th>Chức năng</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${chiTietHoaDonList}" var="CTHoaDon">
+                        <tr>
+                            <td>${CTHoaDon.tenSanPham}</td>
+                            <td>${CTHoaDon.soluong}</td>
+                            <td>${CTHoaDon.dongia}</td>
+                            <td>Hình ảnh</td>
+                            <td>${CTHoaDon.size}</td>
+                            <td>${CTHoaDon.chatLieu}</td>
+                            <td>${CTHoaDon.hang}</td>
+                            <td>${CTHoaDon.mauSac}</td>
+                            <td>${CTHoaDon.danhMuc}</td>
+                            <td>${CTHoaDon.trangthai == 1 ? 'Còn hoạt động' : 'Không hoạt động' }</td>
+
+                            <td class="btn-group">
+                                <a href="#" class="btn" style="background-color: antiquewhite">update</a>
+                                <a href="#" class="btn" style="background-color: burlywood">delete</a>
+                            </td>
+
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-4 bg-success">
+                <p>col-7</p>
+            </div>
         </div>
-        <div class="col-5 bg-success">
-            <p>col-7</p>
-        </div>
-    </div>
 </div>
 <hr>
 
 <%-- Dong 3 danh sach san pham--%>
 <div class="row">
-    <div class="col-7 bg-white">
+    <div class="col-8 bg-white">
         <%-- Hien thi danh sach san pham o day --%>
+        <h2>Danh sách sản phẩm</h2>
         <table class="table">
             <thead>
             <tr>
@@ -103,6 +158,7 @@
                 <th scope="col">Số lượng</th>
                 <th scope="col">Mô tả</th>
                 <th scope="col">Trạng thái</th>
+                <th scope="col">Chức năng</th>
             </tr>
             </thead>
             <tbody>
@@ -116,10 +172,11 @@
                     <td>${lst.tenMauSac}</td>
 
                     <td>${lst.QR}</td>
-                    <td><img src="${lst.hinhAnh}" alt="Image" style="width:100px;height:100px;"/></td>
+                    <td><img src="${lst.hinhAnh}" alt="Image" style="width:80px;height:50px;"/></td>
                     <td>${lst.soLuong}</td>
-                    <td>${lst.moTa}</td>
+                    <td>${empty lst.moTa ? "trống" : lst.moTa}</td>
                     <td>${lst.trangThai == 1 ? 'còn hoạt động' : lst.trangThai}</td>
+                    <td><a href="" class="btn" style="background-color: antiquewhite">add</a></td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -146,7 +203,7 @@
 
 
     </div>
-    <div class="col-5 bg-success">
+    <div class="col-4 bg-success">
         <p>col-7</p>
     </div>
 </div>

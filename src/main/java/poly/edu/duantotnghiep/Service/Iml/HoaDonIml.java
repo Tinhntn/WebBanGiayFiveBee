@@ -85,6 +85,10 @@ public class HoaDonIml implements HoaDonService {
     }
 
 
-
+    @Override
+    public HoaDon detailHD(UUID id) {
+        HoaDon ct = hoaDonRepository.findById(id).get();
+        return ct;
+    }
 
 }

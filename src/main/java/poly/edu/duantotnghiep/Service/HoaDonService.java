@@ -5,6 +5,7 @@ import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
 
 import poly.edu.duantotnghiep.DAO.HoaDonDAOCustom;
 
+import poly.edu.duantotnghiep.Model.ChiTietSanPham;
 import poly.edu.duantotnghiep.Model.HoaDon;
 
 import java.util.List;
@@ -20,5 +21,6 @@ public interface HoaDonService {
     List<HoaDonDAOCustom> getAllHoaDon();
 
     ChiTietHoaDon findbyid(UUID id);
+    HoaDon detailHD(UUID id);
 
 }

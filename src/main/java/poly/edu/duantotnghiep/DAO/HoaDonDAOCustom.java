@@ -17,5 +17,4 @@ public interface HoaDonDAOCustom {
         Double getTongtiengiam();
         String getTrangthai();
         Double getTienkhachdua();
-
 }

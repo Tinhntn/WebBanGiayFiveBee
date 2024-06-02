@@ -7,8 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
 import poly.edu.duantotnghiep.Model.HoaDon;
 import poly.edu.duantotnghiep.Repository.HoaDonRepository;
+import poly.edu.duantotnghiep.Service.ChiTietHoaDonService;
 import poly.edu.duantotnghiep.Service.HoaDonService;
 
 import org.springframework.data.domain.Page;
@@ -31,16 +33,15 @@ public class BanHangTaiQuayController {
     private HoaDonService hoaDonService;
     @Autowired
     ChiTietSanPhamService chiTietSanPhamService;
-
+    @Autowired
+    ChiTietHoaDonService chiTietHoaDonService;
     @Autowired
     HttpSession session;
 
 
 
-
     @GetMapping("/hienthi")
     public String bhtq(Model model, @RequestParam(defaultValue = "0") int page){
-
         int size = 5;
         Page<ChiTieSanPhamCustom> CTSP = chiTietSanPhamService.phanTrang(page,size);
         model.addAttribute("CTSP",CTSP.getContent());
@@ -48,7 +49,6 @@ public class BanHangTaiQuayController {
         model.addAttribute("totalPages",CTSP.getTotalPages());
 //        List<ChiTieSanPhamCustom> lst = chiTietSanPhamService.getAllCTSP();
 //        model.addAttribute("lstCTSP",lst);
-
         List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
         model.addAttribute("listMaHoaDon", list);
         return "banhangtaiquay";
@@ -78,6 +78,25 @@ public class BanHangTaiQuayController {
        hoaDonService.updateSoLuongCTSanPhamByHoaDonId(UUID.fromString(id));
 
         return "redirect:/banhangtaiquay/hienthi";
+    }
+
+    @GetMapping("/detailhd/{id}")
+    public String detailHD(@PathVariable String id, Model model, @RequestParam(defaultValue = "0") int page){
+        HoaDon hd = hoaDonService.detailHD(UUID.fromString(id));
+        model.addAttribute("hoadon", hd);
+        int size = 5;
+        Page<ChiTieSanPhamCustom> CTSP = chiTietSanPhamService.phanTrang(page,size);
+        model.addAttribute("CTSP",CTSP.getContent());
+        model.addAttribute("currentPage",page);
+        model.addAttribute("totalPages",CTSP.getTotalPages());
+//        List<ChiTieSanPhamCustom> lst = chiTietSanPhamService.getAllCTSP();
+//        model.addAttribute("lstCTSP",lst);
+        List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
+        model.addAttribute("listMaHoaDon", list);
+
+        List<ChiTietHoaDonCustom> chiTietHoaDonList = chiTietHoaDonService.findByHoaDonId(UUID.fromString(id));
+        model.addAttribute("chiTietHoaDonList", chiTietHoaDonList);
+        return "banhangtaiquay";
     }
 
 
