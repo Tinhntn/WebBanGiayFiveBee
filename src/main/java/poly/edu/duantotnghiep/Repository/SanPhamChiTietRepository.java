@@ -41,4 +41,7 @@ public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, 
            ,nativeQuery = true)
     List<ChiTieSanPhamCustom> getChiTietSanPhamDAO();
 
+    @Query(value = "select * from ChiTietSanPham ctsp where ctsp.Id = ?", nativeQuery = true)
+    ChiTietSanPham getChiTietSanPhamById(UUID id);
+
 }

@@ -11,6 +11,8 @@ import poly.edu.duantotnghiep.Repository.SanPhamChiTietRepository;
 import poly.edu.duantotnghiep.Service.ChiTietSanPhamService;
 
 import java.util.List;
+import java.util.UUID;
+
 @Service
 public class ChiTietSanPhamIml implements ChiTietSanPhamService {
     @Autowired
@@ -23,5 +25,9 @@ public class ChiTietSanPhamIml implements ChiTietSanPhamService {
     @Override
     public Page<ChiTieSanPhamCustom> phanTrang(int page, int size) {
         return sanPhamChiTietRepository.findAllChiTieSanPhamDAO(PageRequest.of(page,size));
+    }
+    @Override
+    public ChiTietSanPham getChiTietSanPhamById(UUID idctsanpham) {
+        return sanPhamChiTietRepository.getChiTietSanPhamById(idctsanpham);
     }
 }

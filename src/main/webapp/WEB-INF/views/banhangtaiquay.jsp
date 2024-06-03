@@ -19,11 +19,6 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="./styles/main.css">
 </head>
-<script>
-
-
-
-</script>
 <body>
 
 <H2>Bán hàng tại quầy</H2>
@@ -60,7 +55,7 @@
 
         </div>
         <div class ="col-4 ">
-          <h2>Thông tin hóa đơn</h2>
+          <h2>Thông tin hóa đơn ${hoadon.mahoadon}</h2>
         </div>
 
         <div class="col-8 ">
@@ -78,10 +73,20 @@
 
         <div class ="col-4 ">
 
-            <div>Khách hàng <input type="text"  value="${hoadon.mahoadon}"></div>
-            <div>Khách hàng <input type="text"  value="${hoadon.id}"></div>
+            <label>SDT khách hàng</label><input type="text" style="width: 200px;height:
+            30px ;margin-left: 25px" value="">
+            <a href="#" class="btn" style="background-color: antiquewhite">Seach</a><br><br>
+
+            <label>Tên khách hàng</label><input type="text" style="width:200px;height: 30px ;margin-left: 25px" value="">
+            <div class="btn-group">
+                <a href="#" class="btn" style="background-color: antiquewhite">Danh sách</a>
+                <a href="#" class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');">
+                    Xóa
+                </a>
+            </div>
+            <br><br>
         </div>
-    </div>
+
         <hr>
 
 
@@ -123,20 +128,33 @@
 
                             <td class="btn-group">
                                 <a href="#" class="btn" style="background-color: antiquewhite">update</a>
-                                <a href="#" class="btn" style="background-color: burlywood">delete</a>
+                                <a href="/banhangtaiquay/deleteCTHoaDon/${CTHoaDon.id}?idctsanpham=${CTHoaDon.idchitietsanpham}"
+                                   class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');">
+                                    Xóa
+                                </a>
                             </td>
 
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
+            </div>
+            <div class="col-4" style="border: black 1px solid; text-align: center; padding: 20px;">
+                <label>Mã khuyến mại </label>
+                <input type="text" style="width: 200px; height: 30px; margin-left: auto; margin-right: auto; display: block;" value="">
+                <a href="#" class="btn" style="background-color: antiquewhite; display: block; margin-top: 10px;">Seach</a>
+                <br>
+                <label>giá trị giảm </label>
+                <input type="text" style="width: 200px; height: 30px; margin-left: auto; margin-right: auto; display: block;" value="" disabled>
+                <div class="btn-group" style="display: block; margin-top: 10px;">
+                    <a href="#" class="btn" style="background-color: antiquewhite; display: inline-block;">Danh sách</a>
+                    <a href="#" class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');" style="display: inline-block; margin-left: 10px;">
+                        Xóa
+                    </a>
+                </div>
+            </div>
 
-            </div>
-            <div class="col-4 bg-success">
-                <p>col-7</p>
-            </div>
         </div>
-</div>
 <hr>
 
 <%-- Dong 3 danh sach san pham--%>
@@ -201,12 +219,31 @@
                 </button>
             </div>
 
+    </div>
+    <div class="col-4" style="border: black 1px solid; text-align: center;align-content: center">
+        <div>
+            <label>Tiền khách đưa
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="">
+            </label><br>
+            <a href="" class="btn"  style="background-color: antiquewhite; margin-top: 5px">Xác nhận</a><br>
+            <label>Tiền Thừa
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="" disabled>
+            </label>
+            <label>Tiền hóa đơn
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="">
+            </label>
+            <label>Giảm
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="">
+            </label>
+            <label>Tổng tiền thanh toán
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="">
+            </label>
+        </div>
+        <br>
+        <a href="" class="btn" style="background-color: antiquewhite">Thanh toán tiền mặt</a>
+        <a href="" class="btn" style="background-color: darksalmon">Chuyển khoản</a>
+    </div>
 
-    </div>
-    <div class="col-4 bg-success">
-        <p>col-7</p>
-    </div>
-</div>
 </div>
 </div>
 

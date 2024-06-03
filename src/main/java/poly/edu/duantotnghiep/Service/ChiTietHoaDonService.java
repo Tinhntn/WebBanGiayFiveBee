@@ -9,5 +9,6 @@ public interface ChiTietHoaDonService {
 
 //    List<ChiTietHoaDon> getAll();
     List<ChiTietHoaDonCustom> findByHoaDonId(UUID idhoadon);
+    Integer getSoLuongById(UUID id);
 
 }

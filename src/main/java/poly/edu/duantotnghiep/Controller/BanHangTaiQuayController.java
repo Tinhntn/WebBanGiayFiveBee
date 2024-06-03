@@ -8,7 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
+import poly.edu.duantotnghiep.Model.ChiTietSanPham;
 import poly.edu.duantotnghiep.Model.HoaDon;
+import poly.edu.duantotnghiep.Repository.ChiTietHoaDonRepository;
+import poly.edu.duantotnghiep.Repository.ChiTietSanPhamRepository;
 import poly.edu.duantotnghiep.Repository.HoaDonRepository;
 import poly.edu.duantotnghiep.Service.ChiTietHoaDonService;
 import poly.edu.duantotnghiep.Service.HoaDonService;
@@ -35,6 +38,10 @@ public class BanHangTaiQuayController {
     ChiTietSanPhamService chiTietSanPhamService;
     @Autowired
     ChiTietHoaDonService chiTietHoaDonService;
+    @Autowired
+    ChiTietHoaDonRepository chiTietHoaDonRepository;
+    @Autowired
+    ChiTietSanPhamRepository chiTietSanPhamRepository;
     @Autowired
     HttpSession session;
 
@@ -99,5 +106,16 @@ public class BanHangTaiQuayController {
         return "banhangtaiquay";
     }
 
+    @GetMapping("/deleteCTHoaDon/{id}")
+    public String deleteCTHoaDon(@PathVariable("id") String id, @RequestParam("idctsanpham") String idctsanpham){
+        Integer soLuong = chiTietHoaDonService.getSoLuongById(UUID.fromString(id));
+        ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getChiTietSanPhamById(UUID.fromString(idctsanpham));
+        chiTietSanPham.setSoluong(chiTietSanPham.getSoluong() + soLuong);
+        chiTietSanPhamRepository.save(chiTietSanPham);
+        UUID idHoaDon = chiTietHoaDonRepository.findHoaDonIdByChiTietId(UUID.fromString(id));
+        chiTietHoaDonRepository.deleteById(UUID.fromString(id));
+
+        return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+    }
 
 }

@@ -20,6 +20,10 @@ public class ChiTietHoaDonIml implements ChiTietHoaDonService {
     public List<ChiTietHoaDonCustom> findByHoaDonId(UUID idhoadon) {
         return chiTietHoaDonRepository.findByHoaDonId(idhoadon);
     }
+    @Override
+    public Integer getSoLuongById(UUID id) {
+        return chiTietHoaDonRepository.getSoLuongById(id);
+    }
 
 
 }
