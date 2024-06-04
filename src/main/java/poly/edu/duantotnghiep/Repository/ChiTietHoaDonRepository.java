@@ -1,21 +1,24 @@
 package poly.edu.duantotnghiep.Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
 import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
 
 
 import java.util.List;
 import java.util.UUID;
-
+@Repository
 public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, UUID> {
 
 
     List<ChiTietHoaDon> findByIdhoadon(UUID hoaDonId);
-
     @Query(value = "SELECT \n" +
+            "cthd.id AS idHoaDon,"+
             "    hd.mahoadon AS maHoaDon, \n" +
             "    sp.tensanpham AS tenSanPham, \n" +
             "    cl.ten AS chatlieu, \n" +
@@ -37,7 +40,17 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, UU
             "    JOIN MauSac ms ON ctsp.MauSac = ms.id \n" +
             "    JOIN Hang h ON ctsp.hang = h.idHang \n" +
             "WHERE \n" +
-            "    hd.id = :idhoadon;", nativeQuery = true)
+            "    hd.id = :idhoadon" +
+            "    and cthd.trangthai =1 ;", nativeQuery = true)
+
     List<ChiTietHoaDonCustom> findByHoaDonId(UUID idhoadon);
 
+
+    @Query("SELECT c.idhoadon FROM ChiTietHoaDon c WHERE c.id = :chiTietId")
+    UUID findHoaDonIdByChiTietId(UUID chiTietId);
+
+    @Query("Select c.idchitietsanpham from ChiTietHoaDon c where c.id = :id")
+    UUID findIdCTSPByIDCTHD(UUID id);
+    @Query("SELECT cthd.soluong FROM ChiTietHoaDon cthd WHERE cthd.id = :id")
+    Integer getSoLuongById(@Param("id") UUID id);
 }

@@ -1,10 +1,12 @@
 package poly.edu.duantotnghiep.DAO;
 
 import java.util.Date;
+import java.util.UUID;
 
 
 public interface ChiTietHoaDonCustom {
 
+    UUID getIdHoaDon();
     String getMaHoaDon();
     String getTenSanPham();
     int getSoluong();

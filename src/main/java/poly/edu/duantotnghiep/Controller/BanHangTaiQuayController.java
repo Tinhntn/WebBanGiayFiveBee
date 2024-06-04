@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
 import poly.edu.duantotnghiep.Model.HoaDon;
+import poly.edu.duantotnghiep.Repository.ChiTietHoaDonRepository;
 import poly.edu.duantotnghiep.Repository.HoaDonRepository;
 import poly.edu.duantotnghiep.Service.ChiTietHoaDonService;
 import poly.edu.duantotnghiep.Service.HoaDonService;
@@ -37,18 +38,18 @@ public class BanHangTaiQuayController {
     ChiTietHoaDonService chiTietHoaDonService;
     @Autowired
     HttpSession session;
-
-
+    @Autowired
+    ChiTietHoaDonRepository chiTietHoaDonRepository;
 
     @GetMapping("/hienthi")
     public String bhtq(Model model, @RequestParam(defaultValue = "0") int page){
         int size = 5;
+        //list chitietsanpham phan trang
         Page<ChiTieSanPhamCustom> CTSP = chiTietSanPhamService.phanTrang(page,size);
         model.addAttribute("CTSP",CTSP.getContent());
         model.addAttribute("currentPage",page);
         model.addAttribute("totalPages",CTSP.getTotalPages());
-//        List<ChiTieSanPhamCustom> lst = chiTietSanPhamService.getAllCTSP();
-//        model.addAttribute("lstCTSP",lst);
+        //list hoadon
         List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
         model.addAttribute("listMaHoaDon", list);
         return "banhangtaiquay";
@@ -89,15 +90,25 @@ public class BanHangTaiQuayController {
         model.addAttribute("CTSP",CTSP.getContent());
         model.addAttribute("currentPage",page);
         model.addAttribute("totalPages",CTSP.getTotalPages());
-//        List<ChiTieSanPhamCustom> lst = chiTietSanPhamService.getAllCTSP();
-//        model.addAttribute("lstCTSP",lst);
         List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
         model.addAttribute("listMaHoaDon", list);
-
         List<ChiTietHoaDonCustom> chiTietHoaDonList = chiTietHoaDonService.findByHoaDonId(UUID.fromString(id));
-        model.addAttribute("chiTietHoaDonList", chiTietHoaDonList);
+        model.addAttribute("chiTietHoaDonList",chiTietHoaDonList);
         return "banhangtaiquay";
     }
 
+    @PostMapping("/updateSoLuong")
+    public String capNhatSoLuongHoaDonChiTiet(@RequestParam("id") UUID id,@RequestParam("soLuong")int soLuong,RedirectAttributes redirectAttributes){
+        UUID idHoaDon;
+        try{
+            chiTietSanPhamService.updateChiTietSanPhamSuaCTHD(id,soLuong);
+            chiTietHoaDonService.updateSoLuongHoaDonChiTietById(id, soLuong);
+            idHoaDon = chiTietHoaDonRepository.findHoaDonIdByChiTietId(id);
+        }catch (Exception e){
+            System.out.println(e);
+            return "redurect:/banhangtaiquay/hienthi";
+        }
+        return "redirect:/banhangtaiquay/detailhd/"+idHoaDon;
+    }
 
 }

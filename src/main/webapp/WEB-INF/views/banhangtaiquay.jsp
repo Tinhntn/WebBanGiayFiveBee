@@ -2,12 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!-- CSS Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- JavaScript Bootstrap (với Popper.js) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Thay đổi đường dẫn tới tệp CSS và JavaScript tùy thuộc vào cấu trúc thư mục của bạn -->
-<link href="/path/to/bootstrap.min.css" rel="stylesheet">
-<script src="/path/to/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"><!-- JavaScript Bootstrap (với Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script><!-- Thay đổi đường dẫn tới tệp CSS và JavaScript tùy thuộc vào cấu trúc thư mục của bạn -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script><script src="/path/to/bootstrap.bundle.min.js"></script>
 
 <!doctype html>
 <html lang="en">
@@ -32,6 +30,7 @@
 
 
     <%-- Dong 1--%>
+
 
     <div class= "row" >
         <div class="col-8 ">
@@ -83,17 +82,80 @@
         </div>
     </div>
         <hr>
+        <!-- modal update hoadonchitie -->
 
 
-    <%-- Dong 2 chi tiet hoa don--%>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Số lượng</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="updateSoluongForm" action="/banhangtaiquay/updateSoLuong" method="post">
+                            <input type="hidden" id="idHoaDonChiTiet" name="id">
+                            <label for="soLuong">Số lượng:</label>
+                            <input type="number" id="soLuong" name="soLuong" class="form-control">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary" form="updateSoluongForm" onclick="validateForm()">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal script -->
+        <script>
+            var exampleModal = document.getElementById('exampleModal');
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var id = button.getAttribute('data-id');
+                var modal = this;
+                modal.querySelector('.modal-body #idHoaDonChiTiet').value = id; // Gán giá trị ID vào input ẩn
+                modal.querySelector('.modal-body #soLuong').value = ''; // Xóa giá trị cũ nếu có
+            });
+            var soluongInput = document.getElementById('soLuong');
+            var errorMessage = '';
+            function validateForm() {
+                var soluongValue = soluongInput.value.trim();
+
+                // Tiyakin na hindi naka-blank ang input
+                if (soluongValue == '') {
+                    errorMessage = 'Không được để trống';
+                }  if (isNaN(soluongValue)) {
+                    errorMessage = 'Số lượng phải là số';
+                } if (soluongValue<0){
+                    errorMessage='Không được nhập vào số âm';
+                }
+                else {
+                    // Tiyakin na ang kantidad ay hindi naka-negative at hindi higit sa available quantity
+                    var availableQuantity = parseInt(soluongInput.getAttribute('data-available-soLuong'));
+                    if (parseInt(soluongValue) <= 0 || parseInt(soluongValue) > availableQuantity) {
+                        errorMessage = 'Số lượng trong kho không đủ';
+                    }
+                }
+                // I-display ang error message kung mayroon
+                document.getElementById('updateSoluongForm').addEventListener('submit', function(event) {
+                    if (errorMessage) {
+                        event.preventDefault(); // Ngăn chặn gửi dữ liệu
+                        alert(errorMessage);
+                        errorMessage = '';
+                    }
+                });
+            }
+        </script>
+
         <div class="row">
-            <div class="col-8 ">
-                <%-- Hien thi danh sach gio hang ow day --%>
+            <div class="col-8">
+                <!-- Hiển thị danh sách giỏ hàng ở đây -->
                 <h3>Giỏ hàng</h3>
                 <table class="table table-header">
                     <thead>
                     <tr>
-
                         <th>Tên sản phẩm</th>
                         <th>Số lượng</th>
                         <th>Đơn giá</th>
@@ -120,12 +182,11 @@
                             <td>${CTHoaDon.mauSac}</td>
                             <td>${CTHoaDon.danhMuc}</td>
                             <td>${CTHoaDon.trangthai == 1 ? 'Còn hoạt động' : 'Không hoạt động' }</td>
-
-                            <td class="btn-group">
-                                <a href="#" class="btn" style="background-color: antiquewhite">update</a>
-                                <a href="#" class="btn" style="background-color: burlywood">delete</a>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="${CTHoaDon.idHoaDon} ">
+                                    Update
+                                </button>
                             </td>
-
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -136,6 +197,9 @@
                 <p>col-7</p>
             </div>
         </div>
+        </div>
+
+
 </div>
 <hr>
 
@@ -184,19 +248,19 @@
             <div class="pagination">
                 <!-- Link to the previous page -->
                 <button type="button" class="btn btn-primary" ${currentPage == 0 ? 'disabled' : ''}
-                        onclick="window.location.href='/banhangtaiquay/taoHoaDon?page=${currentPage - 1}'">
-                  <<
+                        onclick="window.location.href='/banhangtaiquay/hienthi?page=${currentPage - 1}'">
+                    <<
                 </button>
 
                 <!-- Links to individual pages -->
                 <c:forEach var="i" begin="0" end="${totalPages - 1}">
                     <button type="button" class="btn btn-dark ${i == currentPage ? 'current-page' : ''}"
-                            onclick="window.location.href='/banhangtaiquay/taoHoaDon?page=${i}'">${i + 1}</button>
+                            onclick="window.location.href='/banhangtaiquay/hienthi?page=${i}'">${i + 1}</button>
                 </c:forEach>
 
                 <!-- Link to the next page -->
                 <button type="button" class="btn btn-primary" ${currentPage == totalPages - 1 ? 'disabled' : ''}
-                        onclick="window.location.href='/banhangtaiquay/taoHoaDon?page=${currentPage + 1}'">
+                        onclick="window.location.href='/banhangtaiquay/hienthi?page=${currentPage + 1}'">
                     >>
                 </button>
             </div>
