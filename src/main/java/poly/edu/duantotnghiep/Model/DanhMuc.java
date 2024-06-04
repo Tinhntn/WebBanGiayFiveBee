@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DanhMuc {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String ma;
     private String ten;

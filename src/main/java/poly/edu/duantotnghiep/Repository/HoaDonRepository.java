@@ -17,15 +17,26 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
     @Query(value = "select * from hoadon where trangthai = 0",nativeQuery = true)
     List<HoaDon> findHoaDonByTrangThai();
 
-    @Query(value = "SELECT hoadon.id as idhoadon,hoadon.mahoadon, nhanvien.hovaten AS tennhanvien, khachhang.tenkhachhang\n" +
-            ",hoadon.ngaymua,hoadon.thanhtien,khuyenmai.giatri,hoadon.GhiChu,hoadon.ngaytao,hoadon.ngaysua\n" +
-            ",hoadon.tongtien,hoadon.tongtiengiam,hoadon.trangthai,hoadon.tienkhachdua\n" +
-            "FROM hoadon\n" +
-            "JOIN nhanvien ON hoadon.idnhanvien = nhanvien.id\n" +
-            "join khachhang on hoadon.idKhachHang = khachhang.id\n" +
-            "join khuyenmai on hoadon.idKhuyenMai = khuyenmai.id\n",nativeQuery = true
-            )
-    List<HoaDonDAOCustom> getHoaDonDAO();
+        @Query(value = "SELECT hoadon.id as idhoadon,hoadon.mahoadon, nhanvien.hovaten AS tennhanvien, khachhang.tenkhachhang\n" +
+                ",hoadon.ngaymua,hoadon.thanhtien,khuyenmai.giatri,hoadon.GhiChu,hoadon.ngaytao,hoadon.ngaysua\n" +
+                ",hoadon.tongtien,hoadon.tongtiengiam,hoadon.trangthai,hoadon.tienkhachdua\n" +
+                "FROM hoadon\n" +
+                "JOIN nhanvien ON hoadon.idnhanvien = nhanvien.id\n" +
+                "join khachhang on hoadon.idKhachHang = khachhang.id\n" +
+                "join khuyenmai on hoadon.idKhuyenMai = khuyenmai.id\n",nativeQuery = true
+                )
+        List<HoaDonDAOCustom> getHoaDonDAO();
+
+        @Query(value = "SELECT hoadon.id as idhoadon,hoadon.mahoadon, nhanvien.hovaten AS tennhanvien, khachhang.tenkhachhang\n" +
+                ",hoadon.ngaymua,hoadon.thanhtien,khuyenmai.giatri,hoadon.GhiChu,hoadon.ngaytao,hoadon.ngaysua\n" +
+                ",hoadon.tongtien,hoadon.tongtiengiam,hoadon.trangthai,hoadon.tienkhachdua\n" +
+                "FROM hoadon\n" +
+                "JOIN nhanvien ON hoadon.idnhanvien = nhanvien.id\n" +
+                "join khachhang on hoadon.idKhachHang = khachhang.id\n" +
+                "join khuyenmai on hoadon.idKhuyenMai = khuyenmai.id\n"+
+                "WHERE \n" +
+                "    hoadon.id = :idhoadon;", nativeQuery = true)
+          HoaDonDAOCustom getTenTPHD(UUID idhoadon);
 
 
 

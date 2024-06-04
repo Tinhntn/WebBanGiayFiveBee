@@ -3,6 +3,7 @@ package poly.edu.duantotnghiep.Service.Iml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
+import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
 import poly.edu.duantotnghiep.Repository.ChiTietHoaDonRepository;
 import poly.edu.duantotnghiep.Service.ChiTietHoaDonService;
 
@@ -23,6 +24,11 @@ public class ChiTietHoaDonIml implements ChiTietHoaDonService {
     @Override
     public Integer getSoLuongById(UUID id) {
         return chiTietHoaDonRepository.getSoLuongById(id);
+    }
+
+    @Override
+    public ChiTietHoaDon addCTHD(ChiTietHoaDon cthd) {
+        return chiTietHoaDonRepository.save(cthd);
     }
 
 

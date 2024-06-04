@@ -32,6 +32,17 @@ public class HoaDonIml implements HoaDonService {
     public List<HoaDonDAOCustom> getAllHoaDon() {
         return hoaDonRepository.getHoaDonDAO();
     }
+
+    @Override
+    public HoaDonDAOCustom getAllTenTPD(UUID idHD) {
+        return hoaDonRepository.getTenTPHD(idHD);
+    }
+
+    @Override
+    public void updateHoaDon(HoaDon hd,UUID id) {
+        hoaDonRepository.save(hd);
+    }
+
     @Override
     public ChiTietHoaDon findbyid(UUID id) {
         return chiTietHoaDonRepository.findById(id).orElse(null);
@@ -77,7 +88,6 @@ public class HoaDonIml implements HoaDonService {
                 // Tính toán và cập nhật số lượng mới
                 int soLuongMoi = soLuongBanDau + soLuongctHoaDon;
                 chiTietSanPham.setSoluong(soLuongMoi);
-
                 // Lưu thay đổi vào cơ sở dữ liệu
                 chiTietSanPhamRepository.save(chiTietSanPham);
             }

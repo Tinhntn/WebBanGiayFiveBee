@@ -30,4 +30,16 @@ public class ChiTietSanPhamIml implements ChiTietSanPhamService {
     public ChiTietSanPham getChiTietSanPhamById(UUID idctsanpham) {
         return sanPhamChiTietRepository.getChiTietSanPhamById(idctsanpham);
     }
+
+    @Override
+    public ChiTieSanPhamCustom getChiTietCustomSanPhamById(UUID idctsp) {
+        return sanPhamChiTietRepository.getChiTietSanPhamCTById(idctsp);
+    }
+
+    @Override
+    public ChiTietSanPham updateSLSP(ChiTietSanPham chiTietSanPham) {
+        return sanPhamChiTietRepository.save(chiTietSanPham);
+    }
+
+
 }

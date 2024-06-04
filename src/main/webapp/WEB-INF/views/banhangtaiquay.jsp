@@ -73,16 +73,17 @@
 
         <div class ="col-4 ">
 
-            <label>SDT khách hàng</label><input type="text" style="width: 200px;height:
-            30px ;margin-left: 25px" value="">
-            <a href="#" class="btn" style="background-color: antiquewhite">Seach</a><br><br>
-
-            <label>Tên khách hàng</label><input type="text" style="width:200px;height: 30px ;margin-left: 25px" value="">
+            <form action="/banhangtaiquay/findidKHbysdt/${id}" method="get">
+                <label>SDT khách hàng</label>
+                <input type="text" name="sdt" style="width: 200px; height: 30px; margin-left: 25px" value="${sdt}">
+                <button type="submit" class="btn" style="background-color: antiquewhite">Search</button>
+            </form>
+                <label>Tên khách hàng</label><input type="text" style="width:200px;height: 30px ;margin-left: 25px" value="${tenkh}">
             <div class="btn-group">
-                <a href="#" class="btn" style="background-color: antiquewhite">Danh sách</a>
-                <a href="#" class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');">
-                    Xóa
-                </a>
+                <a href="#" class="btn" style="background-color: antiquewhite;width: 60px;height: 40px" >List</a>
+                <form action="/banhangtaiquay/xoakhachhang/${hoadon.id}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');">
+                    <button type="submit" class="btn btn-outline-danger">Xóa</button>
+                </form>
             </div>
             <br><br>
         </div>
@@ -174,7 +175,7 @@
                 <th scope="col">QR</th>
                 <th scope="col">Hình ảnh</th>
                 <th scope="col">Số lượng</th>
-                <th scope="col">Mô tả</th>
+                <th scope="col">Đơn giá </th>
                 <th scope="col">Trạng thái</th>
                 <th scope="col">Chức năng</th>
             </tr>
@@ -182,19 +183,19 @@
             <tbody>
             <c:forEach items="${CTSP}" var="lst">
                 <tr>
+
                     <td>${lst.tenSanPham}</td>
                     <td>${lst.tenHang}</td>
                     <td>${lst.tenSize}</td>
                     <td>${lst.tenDanhMuc}</td>
                     <td>${lst.tenChatLieu}</td>
                     <td>${lst.tenMauSac}</td>
-
                     <td>${lst.QR}</td>
                     <td><img src="${lst.hinhAnh}" alt="Image" style="width:80px;height:50px;"/></td>
                     <td>${lst.soLuong}</td>
-                    <td>${empty lst.moTa ? "trống" : lst.moTa}</td>
+                    <td>${lst.giaBan}</td>
                     <td>${lst.trangThai == 1 ? 'còn hoạt động' : lst.trangThai}</td>
-                    <td><a href="" class="btn" style="background-color: antiquewhite">add</a></td>
+                    <td><a href="/banhangtaiquay/showCTSPThemCTHD/${hoadon.id}/${lst.id}" class="btn" style="background-color: antiquewhite">add</a></td>
                 </tr>
             </c:forEach>
             </tbody>

@@ -12,5 +12,7 @@ public interface ChiTietSanPhamService {
     List<ChiTieSanPhamCustom> getAllCTSP();
     Page<ChiTieSanPhamCustom> phanTrang(int page, int size);
     ChiTietSanPham getChiTietSanPhamById(UUID idctsanpham);
+    ChiTieSanPhamCustom getChiTietCustomSanPhamById(UUID idctsp);
+    ChiTietSanPham updateSLSP(ChiTietSanPham chiTietSanPham);
 
 }

@@ -44,4 +44,29 @@ public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, 
     @Query(value = "select * from ChiTietSanPham ctsp where ctsp.Id = ?", nativeQuery = true)
     ChiTietSanPham getChiTietSanPhamById(UUID id);
 
+    @Query(value = "SELECT chitietsanpham.id, \n" +
+            "       sanpham.tensanpham AS tensanpham, \n" +
+            "       hang.tenhang AS tenhang, \n" +
+            "       size.ten AS tensize, \n" +
+            "       danhmuc.ten AS tendanhmuc, \n" +
+            "       chatlieu.ten AS tenchatlieu, \n" +
+            "       mausac.ten AS tenmausac,\n" +
+            "       chitietsanpham.gianhap, \n" +
+            "       chitietsanpham.giaban, \n" +
+            "       chitietsanpham.qr AS qr,\n" +
+            "       chitietsanpham.HinhAnh AS hinhanh,\n" +
+            "       chitietsanpham.SoLuong,\n" +
+            "       chitietsanpham.MoTa,\n" +
+            "       chitietsanpham.NgayTao,\n" +
+            "       chitietsanpham.ngaysua,\n" +
+            "       chitietsanpham.trangthai\n" +
+            "FROM chitietsanpham\n" +
+            "JOIN sanpham ON sanpham.id = chitietsanpham.idsanpham\n" +
+            "JOIN hang ON hang.idhang = chitietsanpham.hang\n" +
+            "JOIN size ON size.id = chitietsanpham.size\n" +
+            "JOIN danhmuc ON danhmuc.id = chitietsanpham.danhmuc\n" +
+            "JOIN chatlieu ON chatlieu.id = chitietsanpham.chatlieu\n" +
+            "JOIN mausac ON mausac.id = chitietsanpham.mausac where chitietsanpham.id=:id", nativeQuery = true)
+          ChiTieSanPhamCustom getChiTietSanPhamCTById(UUID id);
+
 }
