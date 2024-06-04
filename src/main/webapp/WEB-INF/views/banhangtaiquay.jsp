@@ -80,7 +80,7 @@
             </form>
                 <label>Tên khách hàng</label><input type="text" style="width:200px;height: 30px ;margin-left: 25px" value="${tenkh}">
             <div class="btn-group">
-                <a href="#" class="btn" style="background-color: antiquewhite;width: 60px;height: 40px" >List</a>
+                <a href="/banhangtaiquay/danhsachkhachhang" class="btn" style="background-color: antiquewhite;width: 60px;height: 40px" >List</a>
                 <form action="/banhangtaiquay/xoakhachhang/${hoadon.id}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');">
                     <button type="submit" class="btn btn-outline-danger">Xóa</button>
                 </form>

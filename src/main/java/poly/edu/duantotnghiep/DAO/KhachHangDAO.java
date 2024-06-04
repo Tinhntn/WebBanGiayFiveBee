@@ -1,21 +1,20 @@
-package poly.edu.duantotnghiep.Model;
+package poly.edu.duantotnghiep.DAO;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.UUID;
 
-@Table(name = "khachhang")
-@Entity
-@Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class KhachHang {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+
+public class KhachHangDAO {
+
     private UUID id;
     private String makhachhang;
     private String loaikhachhang;
