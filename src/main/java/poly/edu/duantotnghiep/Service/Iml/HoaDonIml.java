@@ -51,7 +51,6 @@ public class HoaDonIml implements HoaDonService {
     public List<HoaDon> getAllHoaDoncho() {
         return null;
     }
-
     @Override
     public HoaDon taohoadon(HoaDon hd) {
         String maHoaDon = "HD" + String.format("%05d", (int) (Math.random() * 100000));
@@ -60,19 +59,14 @@ public class HoaDonIml implements HoaDonService {
         hd.setTrangthai(0);
         return  hoaDonRepository.save(hd);
     }
-
     @Override
     public List<HoaDon> getAllHoaDonChuaThanhToan() {
         return hoaDonRepository.findHoaDonByTrangThai();
     }
-
     @Override
     public void delete(UUID id) {
       hoaDonRepository.deleteById(id);
     }
-
-
-
     @Override
     public void updateSoLuongCTSanPhamByHoaDonId(UUID hoaDonId) {
         // Lấy danh sách chi tiết hóa đơn liên quan đến hóa đơn có ID tương ứng
@@ -93,12 +87,14 @@ public class HoaDonIml implements HoaDonService {
             }
         }
     }
-
-
     @Override
     public HoaDon detailHD(UUID id) {
         HoaDon ct = hoaDonRepository.findById(id).get();
         return ct;
+    }
+    @Override
+    public Float hienthiTongTienHD(UUID id) {
+        return hoaDonRepository.getTongTien(id);
     }
 
 }

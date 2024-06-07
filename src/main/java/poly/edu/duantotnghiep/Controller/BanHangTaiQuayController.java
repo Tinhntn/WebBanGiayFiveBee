@@ -9,14 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
 import poly.edu.duantotnghiep.DAO.HoaDonDAOCustom;
-import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
-import poly.edu.duantotnghiep.Model.ChiTietSanPham;
-import poly.edu.duantotnghiep.Model.HoaDon;
-import poly.edu.duantotnghiep.Model.KhachHang;
-import poly.edu.duantotnghiep.Repository.ChiTietHoaDonRepository;
-import poly.edu.duantotnghiep.Repository.ChiTietSanPhamRepository;
-import poly.edu.duantotnghiep.Repository.HoaDonRepository;
-import poly.edu.duantotnghiep.Repository.KhachHangRepository;
+import poly.edu.duantotnghiep.Model.*;
+import poly.edu.duantotnghiep.Repository.*;
 import poly.edu.duantotnghiep.Service.ChiTietHoaDonService;
 import poly.edu.duantotnghiep.Service.HoaDonService;
 
@@ -29,6 +23,7 @@ import poly.edu.duantotnghiep.Service.ChiTietSanPhamService;
 import poly.edu.duantotnghiep.Service.KhachHangService;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,6 +35,8 @@ import java.util.UUID;
         HoaDonRepository hoaDonRepository;
         @Autowired
         KhachHangRepository khachHangRepository;
+        @Autowired
+        KhuyenMaiRepository khuyenMaiRepository;
         @Autowired
         KhachHangService khachHangService;
         @Autowired
@@ -100,8 +97,27 @@ import java.util.UUID;
         public String detailHD(@PathVariable String id, Model model, @RequestParam(defaultValue = "0") int page){
             HoaDon hd = hoaDonService.detailHD(UUID.fromString(id));
             model.addAttribute("hoadon", hd);
+            Float tongtienhd = hoaDonService.hienthiTongTienHD(UUID.fromString(id));
+            model.addAttribute("tongtienhd", tongtienhd);
 
             UUID idKhachHang = hd.getIdkhachhang();
+            UUID idKhuyenMai = hd.getIdkhuyenmai();
+            System.out.println(idKhuyenMai);
+            if(idKhuyenMai != null) {
+                KhuyenMai km = khuyenMaiRepository.findById(idKhuyenMai).orElse(null);
+                String maKM = km.getMakhuyenmai();
+                model.addAttribute("maKM", maKM);
+               Float gtg = km.getGiatri();
+               model.addAttribute("gtg",gtg);
+                Float tongtientt = tongtienhd - gtg;
+                model.addAttribute("tttt",tongtientt);
+            }else{
+                if(tongtienhd != null) {
+                    Float tongtientt = tongtienhd - 0;
+                    model.addAttribute("tttt", tongtientt);
+                }
+            }
+
             if(idKhachHang != null) {
                 KhachHang khachHang = khachHangRepository.findById(idKhachHang).orElse(null);
                 String tenkh = khachHang.getTenkhachhang();
@@ -109,6 +125,8 @@ import java.util.UUID;
                 String sdt = khachHang.getSdt();
                 model.addAttribute("sdt", sdt);
             }
+
+
             int size = 5;
             Page<ChiTieSanPhamCustom> CTSP = chiTietSanPhamService.phanTrang(page,size);
             model.addAttribute("CTSP",CTSP.getContent());
@@ -177,9 +195,20 @@ import java.util.UUID;
             hoaDon.setIdkhachhang(idkhachhang);
 
             hoaDonRepository.save(hoaDon);
-
-
             return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
         }
+
+        @PostMapping("/thanhtoan/{id}")
+        String findidkhachhangbysdt(@PathVariable("id") UUID idHoaDon, @RequestParam("thanhtien") Float thanhtien){
+            HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
+            hoaDon.setThanhtien(thanhtien);
+            hoaDon.setTrangthai(1);
+            hoaDonRepository.save(hoaDon);
+            return "redirect:/banhangtaiquay/hienthi";
+        }
+
+
+
+
 
 }

@@ -20,11 +20,8 @@ public class KhuyenMai {
     private String makhuyenmai;
     private String tenkhuyenmai;
     private Float giatri;
-    private Float dieukienGiam;
     private Date ngaybatdau;
     private Date ngayketthuc;
-    private Boolean hinhthucgiamgia;
-    private int soluong;
     private Date ngaytao;
     private Date ngaysua;
     private int trangthai;

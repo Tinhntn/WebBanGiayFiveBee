@@ -6,6 +6,7 @@ import poly.edu.duantotnghiep.Model.KhachHang;
 import poly.edu.duantotnghiep.Repository.KhachHangRepository;
 import poly.edu.duantotnghiep.Service.KhachHangService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,5 +20,10 @@ public class KhachHangIml implements KhachHangService {
     @Override
     public UUID findIdKhachHangBySdt(String sdt) {
         return khachHangRepository.findIdKhachHangBySdt(sdt);
+    }
+
+    @Override
+    public List<KhachHang> getALlKH() {
+        return khachHangRepository.getAllKH();
     }
 }

@@ -38,6 +38,10 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, UUID> {
                 "    hoadon.id = :idhoadon;", nativeQuery = true)
           HoaDonDAOCustom getTenTPHD(UUID idhoadon);
 
+    @Query(value = "SELECT SUM(donGia) AS TongDonGia\n" +
+            "FROM ChiTietHoaDon WHERE idhoadon = :idhoadon \n" +
+            "GROUP BY idHoaDon;", nativeQuery = true)
+           Float getTongTien(UUID idhoadon);
 
 
 }
