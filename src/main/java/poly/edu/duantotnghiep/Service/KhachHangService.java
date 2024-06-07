@@ -14,7 +14,9 @@ public interface KhachHangService {
 
     List<KhachHang> getALlKH();
 
-//    Page<KhachHangCustom> getALlKhachHang(int page, int size);
+
     List<KhachHang> getALlKhachHanglist();
+
+    KhachHang getKhachHangByMakhachhang(String maKhachHang);
 
 }

@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public interface KhachHangRepository  extends JpaRepository<KhachHang, UUID> {
 
-    @Query(value = "SELECT maKhachHang, loaiKhachHang, tenKhachHang, diaChi, gioiTinh, email, sdt, ngaySinh, ngayThamGia, tichDiem, diemEXP, ngayTao, ngaySua, trangThai\n" +
+    @Query(value = "SELECT ID, maKhachHang, loaiKhachHang, tenKhachHang, diaChi, gioiTinh, email, sdt, ngaySinh, ngayThamGia, tichDiem, diemEXP, ngayTao, ngaySua, trangThai\n" +
             "FROM KhachHang", nativeQuery = true)
     Page<KhachHangCustom> getAllKhachHang(Pageable pageable);
 
@@ -28,5 +28,12 @@ public interface KhachHangRepository  extends JpaRepository<KhachHang, UUID> {
 
     @Query(value = "select * from KhachHang", nativeQuery = true)
     List<KhachHang> getAllKhachHanglist();
+
+
+    @Query(value = "SELECT \n" +
+            "    id, makhachhang, loaikhachhang, tenkhachhang, diachi, gioitinh, email, sdt, ngaysinh, ngaythamgia, tichdiem, diemexp, ngaytao, ngaysua, trangthai \n" +
+            "FROM KhachHang \n" +
+            "WHERE makhachhang = ?;", nativeQuery = true)
+    KhachHang getKhachHangByMakhachhang(String maKhachHang);
 
 }

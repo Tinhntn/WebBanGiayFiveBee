@@ -210,6 +210,7 @@ import java.util.UUID;
         }
 
 
+
         @PostMapping("/thanhtoan/{id}")
         String findidkhachhangbysdt(@PathVariable("id") UUID idHoaDon, @RequestParam("thanhtien") Float thanhtien){
             HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
@@ -224,8 +225,11 @@ import java.util.UUID;
 
 
 
-        @GetMapping("/danhsachkhachhang")
-        String danhsachkhachhang(Model model, @RequestParam(defaultValue = "0") int page){
+
+
+        @GetMapping("/danhsachkhachhang/{id}")
+        String danhsachkhachhang(Model model, @PathVariable("id") UUID id, @RequestParam(defaultValue = "0") int page){
+
 
 //            int size = 1;
 //            Page<KhachHangCustom> listKhachHang = khachHangService.getALlKhachHang(page, size);
@@ -236,6 +240,19 @@ import java.util.UUID;
             model.addAttribute("listKhachHang", listKhachHang);
 
             return "khachHang";
+        }
+
+
+        @PostMapping("/addkhachhangvaohd/{id}/{maKhachHang}")
+        String addkhachhangvaohd(@PathVariable("id") UUID idHoaDon, @PathVariable("maKhachHang") String maKhachHang){
+
+            KhachHang khachHang = khachHangService.getKhachHangByMakhachhang(maKhachHang);
+            HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
+            hoaDon.setIdkhachhang(khachHang.getId());
+
+            hoaDonRepository.save(hoaDon);
+
+            return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
         }
 
 

@@ -39,4 +39,10 @@ public class KhachHangIml implements KhachHangService {
         return khachHangRepository.getAllKhachHanglist();
 
     }
+
+    @Override
+    public KhachHang getKhachHangByMakhachhang(String maKhachHang) {
+        return khachHangRepository.getKhachHangByMakhachhang(maKhachHang);
+    }
+
 }
