@@ -11,6 +11,17 @@ import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
 import poly.edu.duantotnghiep.DAO.HoaDonDAOCustom;
 import poly.edu.duantotnghiep.Model.*;
 import poly.edu.duantotnghiep.Repository.*;
+
+import poly.edu.duantotnghiep.DAO.KhachHangCustom;
+import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
+import poly.edu.duantotnghiep.Model.ChiTietSanPham;
+import poly.edu.duantotnghiep.Model.HoaDon;
+import poly.edu.duantotnghiep.Model.KhachHang;
+import poly.edu.duantotnghiep.Repository.ChiTietHoaDonRepository;
+import poly.edu.duantotnghiep.Repository.ChiTietSanPhamRepository;
+import poly.edu.duantotnghiep.Repository.HoaDonRepository;
+import poly.edu.duantotnghiep.Repository.KhachHangRepository;
+
 import poly.edu.duantotnghiep.Service.ChiTietHoaDonService;
 import poly.edu.duantotnghiep.Service.HoaDonService;
 
@@ -198,6 +209,7 @@ import java.util.UUID;
             return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
         }
 
+
         @PostMapping("/thanhtoan/{id}")
         String findidkhachhangbysdt(@PathVariable("id") UUID idHoaDon, @RequestParam("thanhtien") Float thanhtien){
             HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
@@ -209,6 +221,22 @@ import java.util.UUID;
 
 
 
+
+
+
+        @GetMapping("/danhsachkhachhang")
+        String danhsachkhachhang(Model model, @RequestParam(defaultValue = "0") int page){
+
+//            int size = 1;
+//            Page<KhachHangCustom> listKhachHang = khachHangService.getALlKhachHang(page, size);
+//            System.out.println(listKhachHang);
+//            model.addAttribute("listKhachHang", listKhachHang);
+
+            List<KhachHang> listKhachHang = khachHangService.getALlKhachHanglist();
+            model.addAttribute("listKhachHang", listKhachHang);
+
+            return "khachHang";
+        }
 
 
 }

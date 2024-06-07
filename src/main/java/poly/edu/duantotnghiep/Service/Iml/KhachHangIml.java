@@ -1,7 +1,10 @@
 package poly.edu.duantotnghiep.Service.Iml;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import poly.edu.duantotnghiep.DAO.KhachHangCustom;
 import poly.edu.duantotnghiep.Model.KhachHang;
 import poly.edu.duantotnghiep.Repository.KhachHangRepository;
 import poly.edu.duantotnghiep.Service.KhachHangService;
@@ -25,5 +28,15 @@ public class KhachHangIml implements KhachHangService {
     @Override
     public List<KhachHang> getALlKH() {
         return khachHangRepository.getAllKH();
+    }
+
+//    public Page<KhachHangCustom> getALlKhachHang(int page, int size) {
+//        return khachHangRepository.getAllKhachHang(PageRequest.of(page, size));
+//    }
+
+
+    public List<KhachHang> getALlKhachHanglist(){
+        return khachHangRepository.getAllKhachHanglist();
+
     }
 }
