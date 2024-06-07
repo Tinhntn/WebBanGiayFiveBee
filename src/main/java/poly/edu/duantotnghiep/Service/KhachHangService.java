@@ -13,4 +13,6 @@ public interface KhachHangService {
     UUID findIdKhachHangBySdt(String sdt);
     Page<KhachHangCustom> getALlKhachHang(int page, int size);
     List<KhachHang> getALlKhachHanglist();
+    KhachHang getKhachHangByMakhachhang(String maKhachHang);
+
 }
