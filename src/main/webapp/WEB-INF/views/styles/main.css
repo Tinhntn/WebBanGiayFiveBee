@@ -22,7 +22,10 @@
     color: #413d3d; /* Màu chữ của nút khi ở trang hiện tại */
 
 }
-
+.inline-button{
+    display: inline-block;
+    margin-right: 5px;
+}
 /* Đặt padding và margin cho button */
 
 

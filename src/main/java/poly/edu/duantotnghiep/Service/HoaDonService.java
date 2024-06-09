@@ -19,6 +19,9 @@ public interface HoaDonService {
     void delete(UUID id);
     void updateSoLuongCTSanPhamByHoaDonId(UUID id);
     List<HoaDonDAOCustom> getAllHoaDon();
+    HoaDonDAOCustom getAllTenTPD(UUID idHD);
+
+    void updateHoaDon(HoaDon hd,UUID id);
 
     ChiTietHoaDon findbyid(UUID id);
     HoaDon detailHD(UUID id);

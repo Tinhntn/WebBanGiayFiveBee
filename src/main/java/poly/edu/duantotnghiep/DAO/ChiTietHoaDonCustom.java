@@ -7,9 +7,12 @@ import java.util.UUID;
 public interface ChiTietHoaDonCustom {
 
     UUID getIdHoaDon();
+    UUID getId();
+    UUID getIdchitietsanpham();
     String getMaHoaDon();
     String getTenSanPham();
     int getSoluong();
+    String getHinhAnh();
     double getDongia();
     String getSize();
     String getHang();

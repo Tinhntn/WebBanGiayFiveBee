@@ -10,6 +10,7 @@ import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
 import poly.edu.duantotnghiep.DAO.ChiTietSanPhamDAO;
 import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
 import poly.edu.duantotnghiep.Model.HoaDon;
+
 import poly.edu.duantotnghiep.Repository.ChiTietHoaDonRepository;
 import poly.edu.duantotnghiep.Repository.HoaDonRepository;
 import poly.edu.duantotnghiep.Service.ChiTietHoaDonService;
@@ -44,6 +45,14 @@ public class ChiTietHoaDonIml implements ChiTietHoaDonService {
         chiTietHoaDonRepository.save(chiTietHoaDon);
     }
 
+    public Integer getSoLuongById(UUID id) {
+        return chiTietHoaDonRepository.getSoLuongById(id);
+    }
+
+    @Override
+    public ChiTietHoaDon addCTHD(ChiTietHoaDon cthd) {
+        return chiTietHoaDonRepository.save(cthd);
+    }
 
 
 }

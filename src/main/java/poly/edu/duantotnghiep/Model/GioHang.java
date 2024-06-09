@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class GioHang {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID idgiohang;
     private String idnhanvien;
     private String idkhachhang;

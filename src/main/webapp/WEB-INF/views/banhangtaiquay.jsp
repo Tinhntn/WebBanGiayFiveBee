@@ -17,11 +17,6 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="./styles/main.css">
 </head>
-<script>
-
-
-
-</script>
 <body>
 
 <H2>Bán hàng tại quầy</H2>
@@ -59,7 +54,7 @@
 
         </div>
         <div class ="col-4 ">
-          <h2>Thông tin hóa đơn</h2>
+          <h2>Thông tin hóa đơn ${hoadon.mahoadon}</h2>
         </div>
 
         <div class="col-8 ">
@@ -74,13 +69,43 @@
                    </span>
 
     </div>
+        <script>
+            function validateFormTimKiemKhachHang() {
+                const sdt = document.getElementsByName("sdt")[0].value;
+                const sdtRegex = /^[0-9]{10,11}$/;
 
+                if (!sdt) {
+                    alert("Số điện thoại không được bỏ trống.");
+                    return false;
+                }
+
+                if (!sdtRegex.test(sdt)) {
+                    alert("Số điện thoại phải là số và có độ dài từ 10 đến 11 ký tự.");
+                    return false;
+                }
+
+                return true;
+            }
+        </script>
         <div class ="col-4 ">
 
-            <div>Khách hàng <input type="text"  value="${hoadon.mahoadon}"></div>
-            <div>Khách hàng <input type="text"  value="${hoadon.id}"></div>
+            <form action="/banhangtaiquay/findidKHbysdt/${id}" method="get" onsubmit="return validateFormTimKiemKhachHang()">
+                <label>SDT khách hàng</label>
+                <input type="text" name="sdt" style="width: 200px; height: 30px; margin-left: 25px" value="${sdt}">
+                <button type="submit" class="btn" style="background-color: antiquewhite">Search</button>
+            </form>
+                <label>Tên khách hàng</label>
+            <div style="color: red">${errorMessage}</div>
+            <input type="text" style="width:200px;height: 30px ;margin-left: 25px" value="${tenkh}">
+            <div class="btn-group">
+                <a href="/banhangtaiquay/danhsachkhachhang" class="btn" style="background-color: antiquewhite;width: 60px;height: 40px" >List</a>
+                <form action="/banhangtaiquay/xoakhachhang/${hoadon.id}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');">
+                    <button type="submit" class="btn btn-outline-danger">Xóa</button>
+                </form>
+            </div>
+            <br><br>
         </div>
-    </div>
+
         <hr>
         <!-- modal update hoadonchitie -->
 
@@ -94,7 +119,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="updateSoluongForm" action="/banhangtaiquay/updateSoLuong" method="post">
+                        <form id="updateSoluongForm" action="/banhangtaiquay/updateSoLuong" method="post" onsubmit="return validateAndSubmitForm(event)">
                             <input type="hidden" id="idHoaDonChiTiet" name="id">
                             <label for="soLuong">Số lượng:</label>
                             <input type="number" id="soLuong" name="soLuong" class="form-control">
@@ -102,7 +127,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                        <button type="submit" class="btn btn-primary" form="updateSoluongForm" onclick="validateForm()">Lưu</button>
+                        <button type="submit" class="btn btn-primary" form="updateSoluongForm">Lưu</button>
                     </div>
                 </div>
             </div>
@@ -118,34 +143,34 @@
                 modal.querySelector('.modal-body #idHoaDonChiTiet').value = id; // Gán giá trị ID vào input ẩn
                 modal.querySelector('.modal-body #soLuong').value = ''; // Xóa giá trị cũ nếu có
             });
-            var soluongInput = document.getElementById('soLuong');
-            var errorMessage = '';
-            function validateForm() {
-                var soluongValue = soluongInput.value.trim();
 
-                // Tiyakin na hindi naka-blank ang input
+            function validateAndSubmitForm(event) {
+                var soluongInput = document.getElementById('soLuong');
+                var soluongValue = soluongInput.value.trim();
+                var errorMessage = '';
+
+                // Kiểm tra số lượng
                 if (soluongValue == '') {
                     errorMessage = 'Không được để trống';
-                }  if (isNaN(soluongValue)) {
+                } else if (isNaN(soluongValue)) {
                     errorMessage = 'Số lượng phải là số';
-                } if (soluongValue<0){
-                    errorMessage='Không được nhập vào số âm';
-                }
-                else {
-                    // Tiyakin na ang kantidad ay hindi naka-negative at hindi higit sa available quantity
+                } else if (parseInt(soluongValue) < 0) {
+                    errorMessage = 'Không được nhập vào số âm';
+                } else {
                     var availableQuantity = parseInt(soluongInput.getAttribute('data-available-soLuong'));
                     if (parseInt(soluongValue) <= 0 || parseInt(soluongValue) > availableQuantity) {
                         errorMessage = 'Số lượng trong kho không đủ';
                     }
                 }
-                // I-display ang error message kung mayroon
-                document.getElementById('updateSoluongForm').addEventListener('submit', function(event) {
-                    if (errorMessage) {
-                        event.preventDefault(); // Ngăn chặn gửi dữ liệu
-                        alert(errorMessage);
-                        errorMessage = '';
-                    }
-                });
+
+                // Hiển thị lỗi nếu có và ngăn chặn gửi form
+                if (errorMessage) {
+                    event.preventDefault(); // Ngăn chặn gửi dữ liệu
+                    alert(errorMessage);
+                    return false;
+                }
+
+                return true;
             }
         </script>
 
@@ -158,7 +183,7 @@
                     <tr>
                         <th>Tên sản phẩm</th>
                         <th>Số lượng</th>
-                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
                         <th>Hình ảnh</th>
                         <th>Size</th>
                         <th>Hãng</th>
@@ -174,33 +199,54 @@
                         <tr>
                             <td>${CTHoaDon.tenSanPham}</td>
                             <td>${CTHoaDon.soluong}</td>
-                            <td>${CTHoaDon.dongia}</td>
-                            <td>Hình ảnh</td>
+                            <td>${CTHoaDon.dongia}VNĐ</td>
+                            <td><img src="${CTHoaDon.hinhAnh}" alt="Ảnh sản phẩm" style="width: 100px; height: 100px"></td>
                             <td>${CTHoaDon.size}</td>
                             <td>${CTHoaDon.chatLieu}</td>
                             <td>${CTHoaDon.hang}</td>
                             <td>${CTHoaDon.mauSac}</td>
                             <td>${CTHoaDon.danhMuc}</td>
                             <td>${CTHoaDon.trangthai == 1 ? 'Còn hoạt động' : 'Không hoạt động' }</td>
-                            <td>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="${CTHoaDon.idHoaDon} ">
-                                    Update
+                            <td class="inline-button">
+                                <button type="button" class="btn btn-primary d-inline-block" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="${CTHoaDon.id}">
+                                    Sửa
                                 </button>
+                                <a href="/banhangtaiquay/deleteCTHoaDon/${CTHoaDon.id}?idctsanpham=${CTHoaDon.idchitietsanpham}"
+                                   class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');">
+                                    Xóa
+                                </a>
                             </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
+            </div>
 
+        <div class="col-4" style="border: black 1px solid; text-align: center; padding: 20px;">
+            <form action="/banhangtaiquay/findKhuyenMaiByMa/${id}" method="get">
+                <label>Mã khuyến mại </label>
+                <input type="text" style="width: 200px; height: 30px; margin-left: auto; margin-right: auto; display: block;" name="maKhuyenMai" value="${maKhuyenMai}">
+                <p style="color: red">${errorMessage}</p>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <br>
+            <label>giá trị giảm </label>
+            <input type="text" style="width: 200px; height: 30px; margin-left: auto; margin-right: auto; display: block;" value="${giaTriGiam}" disabled>
+
+            <div class="btn-group" style="display: block; margin-top: 10px;">
+                <a href="#" class="btn" style="background-color: antiquewhite; display: inline-block;">Danh sách</a>
+                <a href="#" class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');" style="display: inline-block; margin-left: 10px;">
+                    Xóa
+                </a>
             </div>
-            <div class="col-4 bg-success">
-                <p>col-7</p>
             </div>
+
         </div>
         </div>
 
 
 </div>
+
 <hr>
 
 <%-- Dong 3 danh sach san pham--%>
@@ -220,7 +266,7 @@
                 <th scope="col">QR</th>
                 <th scope="col">Hình ảnh</th>
                 <th scope="col">Số lượng</th>
-                <th scope="col">Mô tả</th>
+                <th scope="col">Đơn giá </th>
                 <th scope="col">Trạng thái</th>
                 <th scope="col">Chức năng</th>
             </tr>
@@ -228,19 +274,19 @@
             <tbody>
             <c:forEach items="${CTSP}" var="lst">
                 <tr>
+
                     <td>${lst.tenSanPham}</td>
                     <td>${lst.tenHang}</td>
                     <td>${lst.tenSize}</td>
                     <td>${lst.tenDanhMuc}</td>
                     <td>${lst.tenChatLieu}</td>
                     <td>${lst.tenMauSac}</td>
-
                     <td>${lst.QR}</td>
                     <td><img src="${lst.hinhAnh}" alt="Image" style="width:80px;height:50px;"/></td>
                     <td>${lst.soLuong}</td>
-                    <td>${empty lst.moTa ? "trống" : lst.moTa}</td>
+                    <td>${lst.giaBan}VNĐ</td>
                     <td>${lst.trangThai == 1 ? 'còn hoạt động' : lst.trangThai}</td>
-                    <td><a href="" class="btn" style="background-color: antiquewhite">add</a></td>
+                    <td><a href="/banhangtaiquay/showCTSPThemCTHD/${hoadon.id}/${lst.id}" class="btn" style="background-color: antiquewhite">add</a></td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -265,12 +311,31 @@
                 </button>
             </div>
 
+    </div>
+    <div class="col-4" style="border: black 1px solid; text-align: center;align-content: center">
+        <div>
+            <label>Tiền khách đưa
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="">
+            </label><br>
+            <a href="" class="btn"  style="background-color: antiquewhite; margin-top: 5px">Xác nhận</a><br>
+            <label>Tiền Thừa
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="" disabled>
+            </label>
+            <label>Tiền hóa đơn
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="">
+            </label>
+            <label>Giảm
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="">
+            </label>
+            <label>Tổng tiền thanh toán
+                <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="">
+            </label>
+        </div>
+        <br>
+        <a href="" class="btn" style="background-color: antiquewhite">Thanh toán tiền mặt</a>
+        <a href="" class="btn" style="background-color: darksalmon">Chuyển khoản</a>
+    </div>
 
-    </div>
-    <div class="col-4 bg-success">
-        <p>col-7</p>
-    </div>
-</div>
 </div>
 </div>
 

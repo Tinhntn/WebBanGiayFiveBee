@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
 import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
+import poly.edu.duantotnghiep.Model.HoaDon;
 
 
 import java.util.List;
@@ -17,8 +18,10 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, UU
 
 
     List<ChiTietHoaDon> findByIdhoadon(UUID hoaDonId);
-    @Query(value = "SELECT \n" +
-            "cthd.id AS idHoaDon,"+
+
+
+
+    @Query(value = "SELECT ctsp.hinhanh as hinhanh, hd.id as idhoadon ,cthd.id AS id, cthd.idchitietsanpham AS idChiTietSanPham ,\n" +
             "    hd.mahoadon AS maHoaDon, \n" +
             "    sp.tensanpham AS tenSanPham, \n" +
             "    cl.ten AS chatlieu, \n" +
@@ -41,7 +44,7 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, UU
             "    JOIN Hang h ON ctsp.hang = h.idHang \n" +
             "WHERE \n" +
             "    hd.id = :idhoadon" +
-            "    and cthd.trangthai =1 ;", nativeQuery = true)
+            "    and cthd.trangthai =0 ;", nativeQuery = true)
 
     List<ChiTietHoaDonCustom> findByHoaDonId(UUID idhoadon);
 

@@ -19,11 +19,11 @@ public class HoaDon {
     private UUID id;
     private String mahoadon;
     private String idnhanvien;
-    private String idkhachhang;
+    private UUID idkhachhang;
     @Temporal(TemporalType.DATE)
     private Date ngaymua;
     private Float thanhtien;
-    private String idkhuyenmai;
+    private UUID idkhuyenmai;
     private String ghichu;
     @Temporal(TemporalType.DATE)
     private Date ngaytao;
