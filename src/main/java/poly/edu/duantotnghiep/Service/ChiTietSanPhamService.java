@@ -14,5 +14,6 @@ public interface ChiTietSanPhamService {
     ChiTietSanPham getChiTietSanPhamById(UUID idctsanpham);
     ChiTieSanPhamCustom getChiTietCustomSanPhamById(UUID idctsp);
     ChiTietSanPham updateSLSP(ChiTietSanPham chiTietSanPham);
+//    Page<ChiTieSanPhamCustom> searchByTen(String tenSanPham, Pageable pageable);
 
 }

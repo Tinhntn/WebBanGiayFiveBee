@@ -3,6 +3,8 @@ package poly.edu.duantotnghiep.Controller;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +57,8 @@ import java.util.UUID;
         @Autowired
         ChiTietSanPhamService chiTietSanPhamService;
         @Autowired
+        SanPhamChiTietRepository sanPhamChiTietRepository;
+        @Autowired
         ChiTietHoaDonService chiTietHoaDonService;
         @Autowired
         ChiTietHoaDonRepository chiTietHoaDonRepository;
@@ -75,8 +79,37 @@ import java.util.UUID;
             List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
             model.addAttribute("listMaHoaDon", list);
 
+
             return "banhangtaiquay";
         }
+//        @GetMapping("/searchctsp/{id}")
+//        public String timkiemSP(@PathVariable String id,Model model,
+//                                @RequestParam(required = false, name = "tenSanPham") String keyword,
+//                                @RequestParam(defaultValue = "1") int page) { // Default to page 1
+//            int size = 5;
+//
+//            // Ensure page is at least 1
+//            if (page < 1) {
+//                page = 1;
+//            }
+//            Pageable pageable = PageRequest.of(page - 1, size); // Correct page indexing
+//
+//            // Debugging: Print input parameters
+//            System.out.println("Keyword: " + keyword);
+//            System.out.println("Page: " + page);
+//            // Search products by name
+//            List<ChiTieSanPhamCustom> listCTSP = sanPhamChiTietRepository.searchByTenlist(keyword);
+////            Page<ChiTieSanPhamCustom> listCTSP = chiTietSanPhamService.searchByTen(keyword, pageable);
+//            model.addAttribute("CTSP", listCTSP);
+//            model.addAttribute("keyword", keyword); // Add keyword to the model
+//            System.out.println(listCTSP.size());
+//            // Debugging: Print search result details
+////            System.out.println("Search Result Total Pages: " + listCTSP.getTotalPages());
+////            System.out.println("Search Result Current Page Content Size: " + listCTSP.getContent().size());
+//
+//            // Return view name to display the results without redirecting
+//            return "redirect:/banhangtaiquay/detailhd/" + id;
+//        }
         @PostMapping("/taoHoaDon")
         public String taoHoaDon(@ModelAttribute("hoadon") HoaDon hd, Model model, RedirectAttributes redirectAttributes, @RequestParam(defaultValue = "0") int page) {
             List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
@@ -110,10 +143,9 @@ import java.util.UUID;
             model.addAttribute("hoadon", hd);
             Float tongtienhd = hoaDonService.hienthiTongTienHD(UUID.fromString(id));
             model.addAttribute("tongtienhd", tongtienhd);
-
             UUID idKhachHang = hd.getIdkhachhang();
             UUID idKhuyenMai = hd.getIdkhuyenmai();
-            System.out.println(idKhuyenMai);
+
             if(idKhuyenMai != null) {
                 KhuyenMai km = khuyenMaiRepository.findById(idKhuyenMai).orElse(null);
                 String maKM = km.getMakhuyenmai();
@@ -176,7 +208,7 @@ import java.util.UUID;
                               @RequestParam("idhd") UUID idhd, Model model, ChiTietHoaDon cthd){
             ChiTieSanPhamCustom ct = chiTietSanPhamService.getChiTietCustomSanPhamById(id);
             cthd.setIdchitietsanpham(id);
-           cthd.setSoluong(soluong);
+            cthd.setSoluong(soluong);
             cthd.setIdhoadon(idhd);
             float dongia = (float) (ct.getGiaBan() * cthd.getSoluong());
             cthd.setDongia(dongia);
@@ -211,20 +243,6 @@ import java.util.UUID;
 
 
 
-        @PostMapping("/thanhtoan/{id}")
-        String findidkhachhangbysdt(@PathVariable("id") UUID idHoaDon, @RequestParam("thanhtien") Float thanhtien){
-            HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
-            hoaDon.setThanhtien(thanhtien);
-            hoaDon.setTrangthai(1);
-            hoaDonRepository.save(hoaDon);
-            return "redirect:/banhangtaiquay/hienthi";
-        }
-
-
-
-
-
-
 
 
         @GetMapping("/danhsachkhachhang/{id}")
@@ -255,5 +273,68 @@ import java.util.UUID;
             return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
         }
 
+        @PostMapping("/thanhtoan/{id}")
+        String findidkhachhangbysdt(@PathVariable("id") UUID idHoaDon,
+                                    RedirectAttributes redirectAttributes,
+                                    @RequestParam("thanhtien") Float thanhtien,
+                                    @RequestParam(value = "tienkhachdua",defaultValue = "0") String tienkhachduaStr,
+                                    @RequestParam(value = "tienthua",defaultValue = "0") String tienthuaStr
 
-}
+        ){
+            HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
+            if (tienkhachduaStr.equals("0")) {
+                redirectAttributes.addFlashAttribute("error", "khong duoc de trong tien khach dua.");
+                return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+            }
+            if (tienthuaStr.equals("0")) {
+                redirectAttributes.addFlashAttribute("error", "khong duoc de trong tien thua.");
+                return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+            }
+            else {
+                hoaDon.setThanhtien(thanhtien);
+                hoaDon.setTrangthai(1);
+                hoaDonRepository.save(hoaDon);
+                return "redirect:/banhangtaiquay/hienthi";
+            }
+        }
+
+
+        @PostMapping("/trutienkhachdua/{id}")
+        public String truTienKhachDua(@PathVariable("id") UUID idHoaDon,
+                                      @RequestParam(value = "tienkhachdua", defaultValue = "0") String tienkhachduaStr,
+                                      @RequestParam("thanhtien") Float thanhtien,
+                                      Model model,
+                                      RedirectAttributes redirectAttributes) {
+
+            // Kiểm tra xem tienkhachduaStr có chứa số hợp lệ không
+            if (!tienkhachduaStr.matches("^\\d*\\.?\\d+$")) {
+                redirectAttributes.addFlashAttribute("error", "Tiền khách đưa phải là số.");
+                return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+            }
+
+            // Chuyển đổi chuỗi sang số
+            Float tienkhachdua = Float.parseFloat(tienkhachduaStr);
+
+            // Kiểm tra xem tienkhachdua có lớn hơn 0 không
+            if (tienkhachdua <= 0) {
+                redirectAttributes.addFlashAttribute("error", "Tiền khách đưa phải lớn hơn 0.");
+                return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+            }
+            if (tienkhachdua <= thanhtien) {
+                redirectAttributes.addFlashAttribute("error", "Tiền khách đưa phải lớn hơn tổng tiền thanh toán.");
+                return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+            }
+
+            // Tính tiền thừa
+            float tienthua = tienkhachdua - thanhtien;
+
+            // Lưu giá trị vào flash attribute
+            redirectAttributes.addFlashAttribute("tienkhachdua", tienkhachdua);
+            redirectAttributes.addFlashAttribute("tienthua", tienthua);
+
+            return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+        }
+
+
+
+    }

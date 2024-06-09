@@ -77,7 +77,7 @@
                 <input type="text" name="sdt" style="width: 200px; height: 30px; margin-left: 25px" value="${sdt}">
                 <button type="submit" class="btn" style="background-color: antiquewhite">Search</button>
             </form>
-                <label>Tên khách hàng</label><input type="text" style="width:200px;height: 30px ;margin-left: 25px" value="${tenkh}">
+                <label>Tên khách hàng</label><input type="text" style="width:200px;height: 30px ;margin-left: 25px" value="${tenkh}" disabled>
             <div class="btn-group">
                 <a href="/banhangtaiquay/danhsachkhachhang/${id}" class="btn" style="background-color: antiquewhite;width: 60px;height: 40px" >List</a>
                 <form action="/banhangtaiquay/xoakhachhang/${hoadon.id}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');">
@@ -161,7 +161,16 @@
     <div class="col-8 bg-white">
         <%-- Hien thi danh sach san pham o day --%>
         <h2>Danh sách sản phẩm</h2>
-        <table class="table">
+            <form action="/banhangtaiquay/searchctsp/${id}" method="get">
+                <div>
+                    <label class="form-label">Tên sản phẩm</label>
+                    <input type="text" class="form-control" placeholder="Tìm kiếm theo tên" name="tenSanPham"
+                           value="${keyword}"> <!-- Bind input to the keyword -->
+                </div>
+                <button type="submit" class="btn btn-success">Search</button>
+            </form>
+
+            <table class="table">
             <thead>
             <tr>
                 <th scope="col">Tên sản phẩm</th>
@@ -206,10 +215,10 @@
                 </button>
 
                 <!-- Links to individual pages -->
-                <c:forEach var="i" begin="0" end="${totalPages - 1}">
-                    <button type="button" class="btn btn-dark ${i == currentPage ? 'current-page' : ''}"
-                            onclick="window.location.href='/banhangtaiquay/taoHoaDon?page=${i}'">${i + 1}</button>
-                </c:forEach>
+<%--                <c:forEach var="i" begin="0" end="${totalPages - 1}">--%>
+<%--                    <button type="button" class="btn btn-dark ${i == currentPage ? 'current-page' : ''}"--%>
+<%--                            onclick="window.location.href='/banhangtaiquay/taoHoaDon?page=${i}'">${i + 1}</button>--%>
+<%--                </c:forEach>--%>
 
                 <!-- Link to the next page -->
                 <button type="button" class="btn btn-primary" ${currentPage == totalPages - 1 ? 'disabled' : ''}
@@ -221,36 +230,41 @@
     </div>
 
         <div class="col-4" style="border: black 1px solid; text-align: center;align-content: center">
-            <form action="/banhangtaiquay/thanhtoan/${id}" method="post">
-            <div>
+            <form action="/banhangtaiquay/trutienkhachdua/${id}" method="post">
+
                 <label>Tiền khách đưa
-                    <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="">
-                </label><br>
-                <a href="" class="btn"  style="background-color: antiquewhite; margin-top: 5px">Xác nhận</a><br>
+                    <input  type="text"  name="tienkhachdua" style="width: 300px; height: 30px; margin: 0 auto; display: block;"  value="${tienkhachdua}">
+                </label>  </br>
+                <button type="submit" class="btn" style="background-color: antiquewhite; margin-top: 5px">Xác nhận</button></br>
+
                 <label>Tiền Thừa
-                    <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="" disabled>
+                    <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="${tienthua}" disabled>
+                    <input type="hidden" name="thanhtien"  style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="${empty tttt ? '0' : tttt}">
                 </label>
+
                 <label>Tiền hóa đơn
-                    <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="${tongtienhd}">
+                    <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="${tongtienhd}" disabled>
                 </label>
                 <label>Giảm
-                    <input type="text" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="${gtg}">
+                    <input type="text"  style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="${gtg}" disabled>
                 </label>
-            </div>
 
-
+</form>
+                <form action="/banhangtaiquay/thanhtoan/${id}" method="post">
                 <label>Tổng tiền thanh toán
-                    <input type="text" name="thanhtien"  style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="${tttt}">
+                    <input type="text" name="thanhtien"  style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="${empty tttt ? '0' : tttt}" readonly>
                 </label>
+                    <input  type="hidden"  name="tienkhachdua" style="width: 300px; height: 30px; margin: 0 auto; display: block;"  value="${tienkhachdua}">
+                    <input type="hidden" name="tienthua" style="width: 300px; height: 30px; margin: 0 auto; display: block;" value="${tienthua}">
         <br>
                     <br>
-
                 <button type="submit" class="btn btn" style="background-color: burlywood">Thanh toán tiền </button>
+                    <a href="" class="btn" style="background-color: darksalmon">Chuyển khoản</a>
             </form>
-        <a href="" class="btn" style="background-color: darksalmon">Chuyển khoản</a>
+
     </div>
 
-</div>
+
 </div>
 
 </body>
