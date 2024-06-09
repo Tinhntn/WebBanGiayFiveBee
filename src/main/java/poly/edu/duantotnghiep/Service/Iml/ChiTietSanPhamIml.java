@@ -61,6 +61,9 @@ public class ChiTietSanPhamIml implements ChiTietSanPhamService {
     public ChiTietSanPham updateSLSP(ChiTietSanPham chiTietSanPham) {
         return sanPhamChiTietRepository.save(chiTietSanPham);
     }
+//    public Page<ChiTieSanPhamCustom> searchByTen(String tenSanPham, Pageable pageable) {
+//        return sanPhamChiTietRepository.searchByTen(tenSanPham, pageable);
+//    }
 
 
 }

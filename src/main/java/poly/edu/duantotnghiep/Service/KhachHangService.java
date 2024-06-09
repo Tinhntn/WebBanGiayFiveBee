@@ -32,5 +32,11 @@ public interface KhachHangService {
     boolean isSoDienThoai(String soDienThoai);
 
     boolean existsByEmail(String email);
+    List<KhachHang> getALlKH();
+
+
+
+    KhachHang getKhachHangByMakhachhang(String maKhachHang);
+
 
 }

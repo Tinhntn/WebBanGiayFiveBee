@@ -25,5 +25,6 @@ public interface HoaDonService {
 
     ChiTietHoaDon findbyid(UUID id);
     HoaDon detailHD(UUID id);
+    Float hienthiTongTienHD(UUID id);
 
 }

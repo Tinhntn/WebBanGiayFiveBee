@@ -54,5 +54,10 @@ public class ChiTietHoaDonIml implements ChiTietHoaDonService {
         return chiTietHoaDonRepository.save(cthd);
     }
 
+    @Override
+    public ChiTietHoaDon findById(UUID id) {
+        return chiTietHoaDonRepository.findById(id).orElseThrow(()->new RuntimeException("Không tìm thấy chi tiết hóa đơn"));
+    }
+
 
 }

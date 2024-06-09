@@ -32,12 +32,28 @@ public class KhachHangIml implements KhachHangService {
 
     @Override
     public Page<KhachHangCustom> getALlKhachHang(int page, int size) {
-        return khachHangRepository.getAllKhachHang(PageRequest.of(page, size));
+        return null;
+    }
+
+
+    @Override
+    public List<KhachHang> getALlKH() {
+        return khachHangRepository.getAllKH();
+    }
+
+//    public Page<KhachHangCustom> getALlKhachHang(int page, int size) {
+//        return khachHangRepository.getAllKhachHang(PageRequest.of(page, size));
+//    }
+
+
+    public List<KhachHang> getALlKhachHanglist(){
+        return khachHangRepository.getAllKhachHanglist();
+
     }
 
     @Override
-    public List<KhachHang> getALlKhachHanglist() {
-        return khachHangRepository.getAllKhachHanglist();
+    public KhachHang getKhachHangByMakhachhang(String maKhachHang) {
+        return khachHangRepository.getKhachHangByMakhachhang(maKhachHang);
     }
 
     @Override
@@ -129,6 +145,5 @@ public class KhachHangIml implements KhachHangService {
     public boolean existsByEmail(String email) {
         return khachHangRepository.existsByEmail(email);
     }
-
 
 }

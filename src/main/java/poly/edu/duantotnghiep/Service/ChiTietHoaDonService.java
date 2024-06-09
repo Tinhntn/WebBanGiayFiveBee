@@ -15,6 +15,6 @@ public interface ChiTietHoaDonService {
     void updateSoLuongHoaDonChiTietById(UUID id, int soLuong);
     Integer getSoLuongById(UUID id);
     ChiTietHoaDon addCTHD(ChiTietHoaDon cthd);
-
+    ChiTietHoaDon findById(UUID id);
 
 }

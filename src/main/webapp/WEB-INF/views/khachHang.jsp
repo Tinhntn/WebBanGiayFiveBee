@@ -62,7 +62,11 @@
                 <td>${khachHang.ngaytao}</td>
                 <td>${khachHang.ngaysua}</td>
                 <td>${khachHang.trangthai == 1 ? 'còn hoạt động' : 'không hoạt động'}</td>
-                <td><a href="#" class="btn" style="background-color: antiquewhite">add</a></td>
+                <td>
+                    <form action="/banhangtaiquay/addkhachhangvaohd/${id}/${khachHang.makhachhang}" method="post">
+                    <Button class="btn" style="background-color: antiquewhite">add</Button>
+                    </form>
+                </td>
             </tr>
         </c:forEach>
         </tbody>

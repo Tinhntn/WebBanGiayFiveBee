@@ -56,4 +56,5 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, UU
     UUID findIdCTSPByIDCTHD(UUID id);
     @Query("SELECT cthd.soluong FROM ChiTietHoaDon cthd WHERE cthd.id = :id")
     Integer getSoLuongById(@Param("id") UUID id);
+
 }

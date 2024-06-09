@@ -15,7 +15,7 @@ import java.util.UUID;
 @Repository
 public interface KhachHangRepository  extends JpaRepository<KhachHang, UUID> {
 
-    @Query(value = "SELECT maKhachHang, loaiKhachHang, tenKhachHang, diaChi, gioiTinh, email, sdt, ngaySinh, ngayThamGia, tichDiem, diemEXP, ngayTao, ngaySua, trangThai\n" +
+    @Query(value = "SELECT ID, maKhachHang, loaiKhachHang, tenKhachHang, diaChi, gioiTinh, email, sdt, ngaySinh, ngayThamGia, tichDiem, diemEXP, ngayTao, ngaySua, trangThai\n" +
             "FROM KhachHang", nativeQuery = true)
     Page<KhachHangCustom> getAllKhachHang(Pageable pageable);
 
@@ -25,11 +25,24 @@ public interface KhachHangRepository  extends JpaRepository<KhachHang, UUID> {
 
     @Query(value = "Select * from  khachhang where sdt = :sdt",nativeQuery = true)
     KhachHang findKhachHangBySdt(@Param("sdt")String sdt);
-    @Query(value = "select * from KhachHang", nativeQuery = true)
-    List<KhachHang> getAllKhachHanglist();
+
     @Query(value = "select  * from khachhang where email =:email and matkhau = :matkhau",nativeQuery = true)
     KhachHang findKhachHangByEmailAndMatkhau(@Param("email")String email,@Param("matkhau")String matkhau);
     boolean existsByEmail(String email);
     @Query(value = "SELECT MAX(makhachhang) FROM KhachHang")
     String getMaxMaKhachHang();
+
+    @Query(value = "select * from KhachHanng ", nativeQuery = true)
+    List<KhachHang> getAllKH();
+
+    @Query(value = "select * from KhachHang", nativeQuery = true)
+    List<KhachHang> getAllKhachHanglist();
+
+
+    @Query(value = "SELECT \n" +
+            "    id, makhachhang, loaikhachhang, tenkhachhang, diachi, gioitinh, email, sdt, ngaysinh, ngaythamgia, tichdiem, diemexp, ngaytao, ngaysua, trangthai \n" +
+            "FROM KhachHang \n" +
+            "WHERE makhachhang = ?;", nativeQuery = true)
+    KhachHang getKhachHangByMakhachhang(String maKhachHang);
+
 }
