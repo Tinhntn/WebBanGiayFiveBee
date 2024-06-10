@@ -139,17 +139,19 @@
                 </table>
             </div>
             <div class="col-4" style="border: black 1px solid; text-align: center; padding: 20px;">
+                <form action="/banhangtaiquay/findkhuyenmaibymakh/${id}" method="get">
                 <label>Mã khuyến mại </label>
-                <input type="text" style="width: 200px; height: 30px; margin-left: auto; margin-right: auto; display: block;" value="${maKM}">
-                <a href="#" class="btn" style="background-color: antiquewhite; display: block; margin-top: 10px;">Seach</a>
+                <input type="text" name="makhuyenmai" style="width: 200px; height: 30px; margin-left: auto; margin-right: auto; display: block;" value="${maKM}">
+                    <button type="submit" class="btn" style="background-color: antiquewhite">Search</button>
+                </form>
                 <br>
                 <label>giá trị giảm </label>
                 <input type="text" style="width: 200px; height: 30px; margin-left: auto; margin-right: auto; display: block;" value="${gtg}" disabled>
-                <div class="btn-group" style="display: block; margin-top: 10px;">
-                    <a href="#" class="btn" style="background-color: antiquewhite; display: inline-block;">Danh sách</a>
-                    <a href="#" class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');" style="display: inline-block; margin-left: 10px;">
-                        Xóa
-                    </a>
+                <div class="btn-group" style="margin-top: 10px">
+                    <a href="/banhangtaiquay/danhsachkhuyenmai/${id}" class="btn" style="background-color: antiquewhite;width: 60px;height: 40px" >List</a>
+                    <form action="/banhangtaiquay/xoakhuyenmai/${id}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi hóa đơn?');">
+                        <button type="submit" class="btn btn-outline-danger">Xóa</button>
+                    </form>
                 </div>
             </div>
 

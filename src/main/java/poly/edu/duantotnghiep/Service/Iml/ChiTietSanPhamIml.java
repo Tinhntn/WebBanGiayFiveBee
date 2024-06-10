@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import poly.edu.duantotnghiep.DAO.ChiTieSanPhamCustom;
+import poly.edu.duantotnghiep.DAO.ChiTietSanPhamDAO;
 import poly.edu.duantotnghiep.Model.ChiTietSanPham;
 import poly.edu.duantotnghiep.Repository.SanPhamChiTietRepository;
 import poly.edu.duantotnghiep.Service.ChiTietSanPhamService;
@@ -39,6 +40,21 @@ public class ChiTietSanPhamIml implements ChiTietSanPhamService {
     @Override
     public ChiTietSanPham updateSLSP(ChiTietSanPham chiTietSanPham) {
         return sanPhamChiTietRepository.save(chiTietSanPham);
+    }
+
+    @Override
+    public Page<ChiTieSanPhamCustom> findAllChiTietSanPhamCust(int page, int size) {
+        return sanPhamChiTietRepository.findAllChiTietSanPhamCust(PageRequest.of(page,size));
+    }
+
+    @Override
+    public Page<ChiTieSanPhamCustom> findBestSellingProducts(int page, int size) {
+        return sanPhamChiTietRepository.findBestSellingProducts(PageRequest.of(page,size));
+    }
+
+    @Override
+    public ChiTieSanPhamCustom getChiTietSanPhamCTByIdAndMauSac(UUID id, UUID mausac) {
+        return sanPhamChiTietRepository.getChiTietSanPhamCTByIdAndMauSac(id, mausac);
     }
 
 

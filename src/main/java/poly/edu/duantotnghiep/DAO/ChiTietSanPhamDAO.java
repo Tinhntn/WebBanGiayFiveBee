@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class ChiTietSanPhamDAO {
-    private String id;
+    private UUID id;
     private String tensanpham;
     private String tenhang;
     private String tensize;

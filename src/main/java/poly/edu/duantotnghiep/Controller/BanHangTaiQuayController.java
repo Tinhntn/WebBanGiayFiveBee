@@ -22,16 +22,13 @@ import poly.edu.duantotnghiep.Repository.ChiTietSanPhamRepository;
 import poly.edu.duantotnghiep.Repository.HoaDonRepository;
 import poly.edu.duantotnghiep.Repository.KhachHangRepository;
 
-import poly.edu.duantotnghiep.Service.ChiTietHoaDonService;
-import poly.edu.duantotnghiep.Service.HoaDonService;
+import poly.edu.duantotnghiep.Service.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import poly.edu.duantotnghiep.DAO.ChiTieSanPhamCustom;
-import poly.edu.duantotnghiep.Service.ChiTietSanPhamService;
-import poly.edu.duantotnghiep.Service.KhachHangService;
 
 
 import java.math.BigDecimal;
@@ -48,6 +45,8 @@ import java.util.UUID;
         KhachHangRepository khachHangRepository;
         @Autowired
         KhuyenMaiRepository khuyenMaiRepository;
+        @Autowired
+        KhuyenMaiService khuyenMaiService;
         @Autowired
         KhachHangService khachHangService;
         @Autowired
@@ -223,10 +222,6 @@ import java.util.UUID;
 
 
 
-
-
-
-
         @GetMapping("/danhsachkhachhang/{id}")
         String danhsachkhachhang(Model model, @PathVariable("id") UUID id, @RequestParam(defaultValue = "0") int page){
 
@@ -239,7 +234,7 @@ import java.util.UUID;
             List<KhachHang> listKhachHang = khachHangService.getALlKhachHanglist();
             model.addAttribute("listKhachHang", listKhachHang);
 
-            return "khachHang";
+            return "listKhachHangBHTQ";
         }
 
 
@@ -249,6 +244,57 @@ import java.util.UUID;
             KhachHang khachHang = khachHangService.getKhachHangByMakhachhang(maKhachHang);
             HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
             hoaDon.setIdkhachhang(khachHang.getId());
+
+            hoaDonRepository.save(hoaDon);
+
+            return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+        }
+
+        //Tìm khuyến mại bằng mã khuyến mại
+
+        @GetMapping("/findkhuyenmaibymakh/{id}")
+        public String findkhuyenmaibymakh(@PathVariable("id") UUID idHoaDon,@RequestParam("makhuyenmai") String maKhuyenMai){
+
+            KhuyenMai khuyenMai = khuyenMaiRepository.findKhuyenMaiByMakhuyenmai(maKhuyenMai);
+
+            HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
+            hoaDon.setIdkhuyenmai(khuyenMai.getId());
+
+            hoaDonRepository.save(hoaDon);
+            return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+
+        }
+
+        //Xóa Khuyến mại trong Hóa đơn
+        @PostMapping("/xoakhuyenmai/{id}")
+        public String xoakhuyenmai(@PathVariable UUID id){
+            HoaDon hd = hoaDonService.detailHD(id);
+            hd.setIdkhuyenmai(null);
+            hoaDonService.updateHoaDon(hd,id);
+            return "redirect:/banhangtaiquay/detailhd/" + id;
+        }
+
+        @GetMapping("/danhsachkhuyenmai/{id}")
+        String danhsachkhuyenmai(@PathVariable("id") UUID idHoaDon,Model model, @RequestParam(defaultValue = "0") int page){
+
+
+//            int size = 1;
+//            Page<KhachHangCustom> listKhachHang = khachHangService.getALlKhachHang(page, size);
+//            System.out.println(listKhachHang);
+//            model.addAttribute("listKhachHang", listKhachHang);
+
+            List<KhuyenMai> listKhuyenMai = khuyenMaiService.getAllKhuyenMailist();
+            model.addAttribute("listKhuyenMai", listKhuyenMai);
+
+            return "listKhuyenMaiBHTQ";
+        }
+
+        @PostMapping("/addkhuyenmaivaohd/{id}/{idkhuyenmai}")
+        String addkhuyenmaivaohd(@PathVariable("id") UUID idHoaDon, @PathVariable("idkhuyenmai") UUID idKhuyenMai){
+
+
+            HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
+            hoaDon.setIdkhuyenmai(idKhuyenMai);
 
             hoaDonRepository.save(hoaDon);
 
