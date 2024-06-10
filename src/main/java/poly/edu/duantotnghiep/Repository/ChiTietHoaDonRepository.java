@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import poly.edu.duantotnghiep.DAO.ChiTietHoaDonCustom;
 import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
+import poly.edu.duantotnghiep.Model.ChiTietSanPham;
 import poly.edu.duantotnghiep.Model.HoaDon;
 
 
@@ -54,5 +55,12 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, UU
 
     @Query("SELECT cthd.soluong FROM ChiTietHoaDon cthd WHERE cthd.id = :id")
     Integer getSoLuongById(@Param("id") UUID id);
+
+    @Query(value = "SELECT * FROM ChiTietHoaDon " +
+            "WHERE ChiTietHoaDon.idChiTietSanPham = :idChiTietSanPham " +
+            "AND ChiTietHoaDon.idHoaDon = :idHoaDon", nativeQuery = true)
+    List<ChiTietHoaDon> ktraAddctsplencthd(@Param("idChiTietSanPham") UUID idChiTietSanPham,
+                                           @Param("idHoaDon") UUID idHoaDon);
+
 
 }

@@ -205,14 +205,37 @@ import java.util.UUID;
         }
         @PostMapping("/addCTHD/{id}")
         public String addCTHD(@PathVariable UUID id, @RequestParam("soluong") int soluong,
-                              @RequestParam("idhd") UUID idhd, Model model, ChiTietHoaDon cthd){
+                              @RequestParam("idhd") UUID idhd,
+                               RedirectAttributes redirectAttributes,
+                              Model model, ChiTietHoaDon cthd){
             ChiTieSanPhamCustom ct = chiTietSanPhamService.getChiTietCustomSanPhamById(id);
+            ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getChiTietSanPhamById(id);
+            List<ChiTietHoaDon> listcthd = chiTietHoaDonService.getKtraTrungCTSP(chiTietSanPham.getId(),idhd);
+            System.out.println(listcthd.size());
+            try {
+                if (listcthd.size() >= 1 ) {
+                    redirectAttributes.addFlashAttribute("error", "Sản phẩm đã tồn tại trong giỏ hàng .");
+                    return "redirect:/banhangtaiquay/detailhd/" + idhd;
+                }
+                if (soluong <= 0 ) {
+                    redirectAttributes.addFlashAttribute("error", "Số lượng phải từ 1 trở lên .");
+                    return "redirect:/banhangtaiquay/detailhd/" + idhd;
+                }
+                if (soluong > chiTietSanPham.getSoluong()) {
+                    redirectAttributes.addFlashAttribute("error", "Số lượng trong kho không đủ .");
+                    return "redirect:/banhangtaiquay/detailhd/" + idhd;
+                }
+            }catch (NumberFormatException e) {
+                redirectAttributes.addFlashAttribute("error", "Số lượng phải là một số nguyên.");
+                return "redirect:/banhangtaiquay/detailhd/" + idhd;
+            }
+
             cthd.setIdchitietsanpham(id);
             cthd.setSoluong(soluong);
             cthd.setIdhoadon(idhd);
             float dongia = (float) (ct.getGiaBan() * cthd.getSoluong());
             cthd.setDongia(dongia);
-            ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getChiTietSanPhamById(id);
+
             chiTietSanPham.setSoluong(chiTietSanPham.getSoluong() - cthd.getSoluong());
             chiTietSanPhamService.updateSLSP(chiTietSanPham);
 //            cthd.setIdhoadon(idHoaDon); // Gán id của hóa đơn
@@ -248,7 +271,6 @@ import java.util.UUID;
         @GetMapping("/danhsachkhachhang/{id}")
         String danhsachkhachhang(Model model, @PathVariable("id") UUID id, @RequestParam(defaultValue = "0") int page){
 
-
 //            int size = 1;
 //            Page<KhachHangCustom> listKhachHang = khachHangService.getALlKhachHang(page, size);
 //            System.out.println(listKhachHang);
@@ -277,19 +299,15 @@ import java.util.UUID;
         String findidkhachhangbysdt(@PathVariable("id") UUID idHoaDon,
                                     RedirectAttributes redirectAttributes,
                                     @RequestParam("thanhtien") Float thanhtien,
-                                    @RequestParam(value = "tienkhachdua",defaultValue = "0") String tienkhachduaStr,
-                                    @RequestParam(value = "tienthua",defaultValue = "0") String tienthuaStr
+                                    @RequestParam(value = "tienkhachdua",defaultValue = "0") String tienkhachduaStr
 
         ){
             HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
             if (tienkhachduaStr.equals("0")) {
-                redirectAttributes.addFlashAttribute("error", "khong duoc de trong tien khach dua.");
+                redirectAttributes.addFlashAttribute("error", "Không được để trống tiền khách đưa và tiền thừa");
                 return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
             }
-            if (tienthuaStr.equals("0")) {
-                redirectAttributes.addFlashAttribute("error", "khong duoc de trong tien thua.");
-                return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
-            }
+
             else {
                 hoaDon.setThanhtien(thanhtien);
                 hoaDon.setTrangthai(1);
