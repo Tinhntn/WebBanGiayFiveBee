@@ -12,16 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/hoadon")
 public class HoaDonController {
 
     @Autowired
     HoaDonService hoaDonService;
+
     @GetMapping("")
-    public String show(Model model){
-        return "index";
-    }
-    @GetMapping("/hoa-don")
     public String getAllHoaDon(Model model){
         List<HoaDonDAOCustom> lstHoaDon = hoaDonService.getAllHoaDon();
         model.addAttribute("lstHoaDon",lstHoaDon);

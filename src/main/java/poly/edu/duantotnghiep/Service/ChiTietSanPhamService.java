@@ -11,6 +11,7 @@ import java.util.UUID;
 public interface ChiTietSanPhamService {
     List<ChiTieSanPhamCustom> getAllCTSP();
     Page<ChiTieSanPhamCustom> phanTrang(int page, int size);
+     void updateChiTietSanPhamSuaCTHD(UUID id , int soLuong);
     ChiTietSanPham getChiTietSanPhamById(UUID idctsanpham);
     ChiTieSanPhamCustom getChiTietCustomSanPhamById(UUID idctsp);
     ChiTietSanPham updateSLSP(ChiTietSanPham chiTietSanPham);

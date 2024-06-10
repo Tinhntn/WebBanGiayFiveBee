@@ -24,7 +24,8 @@ public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, 
             "join size on size.id = chitietsanpham.size\n" +
             "join danhmuc on danhmuc.id = chitietsanpham.danhmuc\n" +
             "join chatlieu on chatlieu.id = chitietsanpham.chatlieu\n" +
-            "join mausac on mausac.id = chitietsanpham.mausac\n"
+            "join mausac on mausac.id = chitietsanpham.mausac\n" +
+            "where chitietsanpham.trangthai =1"
            ,nativeQuery = true)
     Page<ChiTieSanPhamCustom> findAllChiTieSanPhamDAO(Pageable pageable);
     @Query(value = "select * from chitietsanpham",nativeQuery = true)
@@ -38,7 +39,8 @@ public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, 
             "join size on size.id = chitietsanpham.size\n" +
             "join danhmuc on danhmuc.id = chitietsanpham.danhmuc\n" +
             "join chatlieu on chatlieu.id = chitietsanpham.chatlieu\n" +
-            "join mausac on mausac.id = chitietsanpham.mausac\n"
+            "join mausac on mausac.id = chitietsanpham.mausac\n" +
+            "where  chitietsanpham.trangthai =1 "
            ,nativeQuery = true)
     List<ChiTieSanPhamCustom> getChiTietSanPhamDAO();
 

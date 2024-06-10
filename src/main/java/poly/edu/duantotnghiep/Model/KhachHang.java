@@ -16,6 +16,7 @@ import java.util.UUID;
 public class KhachHang {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, unique = true)
     private UUID id;
     private String makhachhang;
     private String loaikhachhang;
@@ -23,6 +24,7 @@ public class KhachHang {
     private String diachi;
     private String gioitinh;
     private String email;
+    private String matkhau;
     private String sdt;
     private Date ngaysinh;
     private Date ngaythamgia;
