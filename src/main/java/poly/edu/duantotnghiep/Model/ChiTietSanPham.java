@@ -25,6 +25,7 @@ public class ChiTietSanPham {
     private String idkhuyenmai;
     private Float gianhap;
     private Float giaban;
+    @Column(name = "QR", insertable = false, updatable = false)
     private String qr;
     private String hinhanh;
     private int soluong;

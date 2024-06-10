@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import poly.edu.duantotnghiep.DAO.ChiTieSanPhamCustom;
 import poly.edu.duantotnghiep.DAO.ChiTietSanPhamDAO;
@@ -24,7 +25,8 @@ public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, 
             "join size on size.id = chitietsanpham.size\n" +
             "join danhmuc on danhmuc.id = chitietsanpham.danhmuc\n" +
             "join chatlieu on chatlieu.id = chitietsanpham.chatlieu\n" +
-            "join mausac on mausac.id = chitietsanpham.mausac\n"
+            "join mausac on mausac.id = chitietsanpham.mausac\n" +
+            "where chitietsanpham.trangthai =1"
            ,nativeQuery = true)
     Page<ChiTieSanPhamCustom> findAllChiTieSanPhamDAO(Pageable pageable);
     @Query(value = "select * from chitietsanpham",nativeQuery = true)
@@ -38,7 +40,8 @@ public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, 
             "join size on size.id = chitietsanpham.size\n" +
             "join danhmuc on danhmuc.id = chitietsanpham.danhmuc\n" +
             "join chatlieu on chatlieu.id = chitietsanpham.chatlieu\n" +
-            "join mausac on mausac.id = chitietsanpham.mausac\n"
+            "join mausac on mausac.id = chitietsanpham.mausac\n" +
+            "where  chitietsanpham.trangthai =1 "
            ,nativeQuery = true)
     List<ChiTieSanPhamCustom> getChiTietSanPhamDAO();
 
@@ -69,7 +72,6 @@ public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, 
             "JOIN chatlieu ON chatlieu.id = chitietsanpham.chatlieu\n" +
             "JOIN mausac ON mausac.id = chitietsanpham.mausac where chitietsanpham.id=:id", nativeQuery = true)
           ChiTieSanPhamCustom getChiTietSanPhamCTById(UUID id);
-
 
 
     // Bán hàng online
@@ -147,4 +149,32 @@ public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, 
     ChiTieSanPhamCustom getChiTietSanPhamCTByIdAndMauSac(UUID id, UUID mausac);
 
 
+//
+//    @Query(value = "select chitietsanpham.id,sanpham.tensanpham as tensanpham, hang.tenhang as tenhang , size.ten as tensize, danhmuc.ten as tendanhmuc,chatlieu.ten as tenchatlieu,  mausac.ten as tenmausac,\n" +
+//            "\tchitietsanpham.gianhap, chitietsanpham.giaban, chitietsanpham.qr as qr,chitietsanpham.HinhAnh as hinhanh,chitietsanpham.SoLuong,chitietsanpham.MoTa,ChiTietSanPham.NgayTao,\n" +
+//            "\tchitietsanpham.ngaysua,chitietsanpham.trangthai\n" +
+//            "from chitietsanpham\n" +
+//            "join sanpham on sanpham.id = chitietsanpham.idsanpham\n" +
+//            "join hang on hang.idhang =chitietsanpham.hang\n" +
+//            "join size on size.id = chitietsanpham.size\n" +
+//            "join danhmuc on danhmuc.id = chitietsanpham.danhmuc\n" +
+//            "join chatlieu on chatlieu.id = chitietsanpham.chatlieu\n" +
+//            "join mausac on mausac.id = chitietsanpham.mausac\n" +
+//            "where SanPham.tenSanPham like'%ten%"
+//            ,nativeQuery = true)
+//    Page<ChiTieSanPhamCustom> searchByTen(@Param("tenSanPham") String tenSanPham, Pageable pageable);
+
+//    @Query(value = "select chitietsanpham.id,sanpham.tensanpham as tensanpham, hang.tenhang as tenhang , size.ten as tensize, danhmuc.ten as tendanhmuc,chatlieu.ten as tenchatlieu,  mausac.ten as tenmausac,\n" +
+//            "\tchitietsanpham.gianhap, chitietsanpham.giaban, chitietsanpham.qr as qr,chitietsanpham.HinhAnh as hinhanh,chitietsanpham.SoLuong,chitietsanpham.MoTa,ChiTietSanPham.NgayTao,\n" +
+//            "\tchitietsanpham.ngaysua,chitietsanpham.trangthai\n" +
+//            "from chitietsanpham\n" +
+//            "join sanpham on sanpham.id = chitietsanpham.idsanpham\n" +
+//            "join hang on hang.idhang =chitietsanpham.hang\n" +
+//            "join size on size.id = chitietsanpham.size\n" +
+//            "join danhmuc on danhmuc.id = chitietsanpham.danhmuc\n" +
+//            "join chatlieu on chatlieu.id = chitietsanpham.chatlieu\n" +
+//            "join mausac on mausac.id = chitietsanpham.mausac\n" +
+//            "where SanPham.tenSanPham LIKE %:tenSanPham%"
+//            ,nativeQuery = true)
+//    List<ChiTieSanPhamCustom> searchByTenlist(@Param("tenSanPham") String tenSanPham);
 }

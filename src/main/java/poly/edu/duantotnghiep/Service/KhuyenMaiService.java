@@ -1,5 +1,6 @@
 package poly.edu.duantotnghiep.Service;
 
+
 import org.springframework.data.repository.query.Param;
 import poly.edu.duantotnghiep.Model.KhuyenMai;
 
@@ -12,3 +13,5 @@ public interface KhuyenMaiService {
     KhuyenMai findKhuyenMaiByMakhuyenmai(String makhuyenmai);
 
 }
+
+

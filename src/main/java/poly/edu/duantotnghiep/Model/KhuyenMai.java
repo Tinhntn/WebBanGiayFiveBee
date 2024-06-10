@@ -23,6 +23,7 @@ public class KhuyenMai {
     private Float dieukiengiam;
     private Date ngaybatdau;
     private Date ngayketthuc;
+    private Boolean hinhthucapdung;
     private int soluong;
     private Date ngaytao;
     private Date ngaysua;

@@ -22,5 +22,6 @@ public class KhuyenMaiIml implements KhuyenMaiService {
     @Override
     public KhuyenMai findKhuyenMaiByMakhuyenmai(String makhuyenmai) {
         return khuyenMaiRepository.findKhuyenMaiByMakhuyenmai(makhuyenmai);
+
     }
 }
