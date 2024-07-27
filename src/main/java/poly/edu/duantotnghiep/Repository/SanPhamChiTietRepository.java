@@ -16,108 +16,92 @@ import java.util.UUID;
 @Repository
 public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, UUID> {
 
-    @Query(value = "select chitietsanpham.id,sanpham.tensanpham as tensanpham, hang.tenhang as tenhang , size.ten as tensize, danhmuc.ten as tendanhmuc,chatlieu.ten as tenchatlieu,  mausac.ten as tenmausac,\n" +
-            "\tchitietsanpham.gianhap, chitietsanpham.giaban, chitietsanpham.qr as qr,chitietsanpham.HinhAnh as hinhanh,chitietsanpham.SoLuong,chitietsanpham.MoTa,ChiTietSanPham.NgayTao,\n" +
-            "\tchitietsanpham.ngaysua,chitietsanpham.trangthai\n" +
-            "from chitietsanpham\n" +
-            "join sanpham on sanpham.id = chitietsanpham.idsanpham\n" +
-            "join hang on hang.idhang =chitietsanpham.hang\n" +
-            "join size on size.id = chitietsanpham.size\n" +
-            "join danhmuc on danhmuc.id = chitietsanpham.danhmuc\n" +
-            "join chatlieu on chatlieu.id = chitietsanpham.chatlieu\n" +
-            "join mausac on mausac.id = chitietsanpham.mausac\n" +
-            "where chitietsanpham.trangthai =1"
-           ,nativeQuery = true)
+    @Query(value = "SELECT chitietsanpham.id, sanpham.tensanpham AS tensanpham, hang.tenhang AS tenhang, size.ten AS tensize, " +
+            "danhmuc.ten AS tendanhmuc, chatlieu.ten AS tenchatlieu, mausac.ten AS tenmausac, chitietsanpham.gianhap, " +
+            "chitietsanpham.giaban, chitietsanpham.qr AS qr, chitietsanpham.HinhAnh AS hinhanh, chitietsanpham.SoLuong, " +
+            "chitietsanpham.MoTa, chitietsanpham.NgayTao, chitietsanpham.ngaysua, chitietsanpham.trangthai " +
+            "FROM chitietsanpham " +
+            "JOIN sanpham ON sanpham.id = chitietsanpham.idsanpham " +
+            "JOIN hang ON hang.idhang = chitietsanpham.hang " +
+            "JOIN size ON size.id = chitietsanpham.size " +
+            "JOIN danhmuc ON danhmuc.id = chitietsanpham.danhmuc " +
+            "JOIN chatlieu ON chatlieu.id = chitietsanpham.chatlieu " +
+            "JOIN mausac ON mausac.id = chitietsanpham.mausac " +
+            "WHERE chitietsanpham.trangthai = 1",
+            nativeQuery = true)
     Page<ChiTieSanPhamCustom> findAllChiTieSanPhamDAO(Pageable pageable);
-    @Query(value = "select * from chitietsanpham",nativeQuery = true)
-    List<ChiTietSanPham> getALlChiTietSanPham();
-    @Query(value = "select chitietsanpham.id,sanpham.tensanpham as tensanpham, hang.tenhang as tenhang , size.ten as tensize, danhmuc.ten as tendanhmuc,chatlieu.ten as tenchatlieu,  mausac.ten as tenmausac,\n" +
-            "\tchitietsanpham.gianhap, chitietsanpham.giaban, chitietsanpham.qr as qr,chitietsanpham.HinhAnh as hinhanh,chitietsanpham.SoLuong,chitietsanpham.MoTa,ChiTietSanPham.NgayTao,\n" +
-            "\tchitietsanpham.ngaysua,chitietsanpham.trangthai\n" +
-            "from chitietsanpham\n" +
-            "join sanpham on sanpham.id = chitietsanpham.idsanpham\n" +
-            "join hang on hang.idhang =chitietsanpham.hang\n" +
-            "join size on size.id = chitietsanpham.size\n" +
-            "join danhmuc on danhmuc.id = chitietsanpham.danhmuc\n" +
-            "join chatlieu on chatlieu.id = chitietsanpham.chatlieu\n" +
-            "join mausac on mausac.id = chitietsanpham.mausac\n" +
-            "where  chitietsanpham.trangthai =1 "
-           ,nativeQuery = true)
+
+
+    @Query(value = "SELECT chitietsanpham.id, sanpham.tensanpham AS tensanpham, hang.tenhang AS tenhang, size.ten AS tensize, " +
+            "danhmuc.ten AS tendanhmuc, chatlieu.ten AS tenchatlieu, mausac.ten AS tenmausac, chitietsanpham.gianhap, " +
+            "chitietsanpham.giaban, chitietsanpham.qr AS qr, chitietsanpham.HinhAnh AS hinhanh, chitietsanpham.SoLuong, " +
+            "chitietsanpham.MoTa, chitietsanpham.NgayTao, chitietsanpham.ngaysua, chitietsanpham.trangthai " +
+            "FROM chitietsanpham " +
+            "JOIN sanpham ON sanpham.id = chitietsanpham.idsanpham " +
+            "JOIN hang ON hang.idhang = chitietsanpham.hang " +
+            "JOIN size ON size.id = chitietsanpham.size " +
+            "JOIN danhmuc ON danhmuc.id = chitietsanpham.danhmuc " +
+            "JOIN chatlieu ON chatlieu.id = chitietsanpham.chatlieu " +
+            "JOIN mausac ON mausac.id = chitietsanpham.mausac " +
+            "WHERE chitietsanpham.trangthai = 1",
+            nativeQuery = true)
     List<ChiTieSanPhamCustom> getChiTietSanPhamDAO();
 
-    @Query(value = "select * from ChiTietSanPham ctsp where ctsp.Id = ?", nativeQuery = true)
-    ChiTietSanPham getChiTietSanPhamById(UUID id);
 
-    @Query(value = "SELECT chitietsanpham.id, \n" +
-            "       sanpham.tensanpham AS tensanpham, \n" +
-            "       hang.tenhang AS tenhang, \n" +
-            "       size.ten AS tensize, \n" +
-            "       danhmuc.ten AS tendanhmuc, \n" +
-            "       chatlieu.ten AS tenchatlieu, \n" +
-            "       mausac.ten AS tenmausac,\n" +
-            "       chitietsanpham.gianhap, \n" +
-            "       chitietsanpham.giaban, \n" +
-            "       chitietsanpham.qr AS qr,\n" +
-            "       chitietsanpham.HinhAnh AS hinhanh,\n" +
-            "       chitietsanpham.SoLuong,\n" +
-            "       chitietsanpham.MoTa,\n" +
-            "       chitietsanpham.NgayTao,\n" +
-            "       chitietsanpham.ngaysua,\n" +
-            "       chitietsanpham.trangthai\n" +
-            "FROM chitietsanpham\n" +
-            "JOIN sanpham ON sanpham.id = chitietsanpham.idsanpham\n" +
-            "JOIN hang ON hang.idhang = chitietsanpham.hang\n" +
-            "JOIN size ON size.id = chitietsanpham.size\n" +
-            "JOIN danhmuc ON danhmuc.id = chitietsanpham.danhmuc\n" +
-            "JOIN chatlieu ON chatlieu.id = chitietsanpham.chatlieu\n" +
-            "JOIN mausac ON mausac.id = chitietsanpham.mausac where chitietsanpham.id=:id", nativeQuery = true)
-          ChiTieSanPhamCustom getChiTietSanPhamCTById(UUID id);
+    @Query(value = "SELECT * FROM chitietsanpham WHERE id = :id", nativeQuery = true)
+    ChiTietSanPham getChiTietSanPhamById(@Param("id") UUID id);
+
+
+    @Query(value = "SELECT chitietsanpham.id,chitietsanpham.idSanPham,chitietsanpham.hang,chitietsanpham.size,chitietsanpham.danhmuc,chitietsanpham.chatlieu,chitietsanpham.mausac," +
+            " sanpham.tensanpham AS tensanpham, hang.tenhang AS tenhang, size.ten AS tensize, " +
+            "danhmuc.ten AS tendanhmuc, chatlieu.ten AS tenchatlieu, mausac.ten AS tenmausac, chitietsanpham.gianhap, " +
+            "chitietsanpham.giaban, chitietsanpham.qr AS qr, chitietsanpham.HinhAnh AS hinhanh, chitietsanpham.SoLuong, " +
+            "chitietsanpham.MoTa, chitietsanpham.NgayTao, chitietsanpham.ngaysua, chitietsanpham.trangthai " +
+            "FROM chitietsanpham " +
+            "JOIN sanpham ON sanpham.id = chitietsanpham.idsanpham " +
+            "JOIN hang ON hang.idhang = chitietsanpham.hang " +
+            "JOIN size ON size.id = chitietsanpham.size " +
+            "JOIN danhmuc ON danhmuc.id = chitietsanpham.danhmuc " +
+            "JOIN chatlieu ON chatlieu.id = chitietsanpham.chatlieu " +
+            "JOIN mausac ON mausac.id = chitietsanpham.mausac " +
+            "WHERE chitietsanpham.id = :id",
+            nativeQuery = true)
+    ChiTieSanPhamCustom getChiTietSanPhamCTById(@Param("id") UUID id);
+
 
 
     // Bán hàng online
-    @Query(value = "SELECT ctsp.Id as id,\n" +
-            "       sp.tensanpham as tensanpham,\n" +
-            "       h.tenhang as tenhang,\n" +
-            "       s.ten as tensize,\n" +
-            "       dm.ten as tendanhmuc,\n" +
-            "       cl.ten as tenchatlieu,\n" +
-            "       ms.ten as tenmausac,\n" +
-            "       ctsp.idKhuyenMai as tenkhuyenmai,\n" +
-            "       ctsp.gianhap as gianhap,\n" +
-            "       ctsp.giaban as giaban,\n" +
-            "       ctsp.qr as qr,\n" +
-            "       ctsp.hinhanh as hinhanh,\n" +
-            "       ctsp.soluong as soluong,\n" +
-            "       ctsp.mota as mota,\n" +
-            "       ctsp.ngaytao as ngaytao,\n" +
-            "       ctsp.ngaysua as ngaysua,\n" +
-            "       ctsp.trangthai as trangthai\n" +
-            "FROM ChiTietSanPham ctsp\n" +
-            "JOIN sanpham sp ON sp.id = ctsp.idSanPham\n" +
-            "JOIN hang h ON h.idHang = ctsp.hang\n" +
-            "JOIN size s ON s.id = ctsp.Size\n" +
-            "JOIN danhmuc dm ON dm.id = ctsp.DanhMuc\n" +
-            "JOIN chatlieu cl ON cl.id = ctsp.ChatLieu\n" +
-            "JOIN mausac ms ON ms.id = ctsp.MauSac;\n",
+    @Query(value = "SELECT chitietsanpham.id, sanpham.tensanpham AS tensanpham, hang.tenhang AS tenhang, size.ten AS tensize, " +
+            "danhmuc.ten AS tendanhmuc, chatlieu.ten AS tenchatlieu, mausac.ten AS tenmausac, chitietsanpham.gianhap, " +
+            "chitietsanpham.giaban, chitietsanpham.qr AS qr, chitietsanpham.HinhAnh AS hinhanh, chitietsanpham.SoLuong, " +
+            "chitietsanpham.MoTa, chitietsanpham.NgayTao, chitietsanpham.ngaysua, chitietsanpham.trangthai " +
+            "FROM chitietsanpham " +
+            "JOIN sanpham ON sanpham.id = chitietsanpham.idsanpham " +
+            "JOIN hang ON hang.idhang = chitietsanpham.hang " +
+            "JOIN size ON size.id = chitietsanpham.size " +
+            "JOIN danhmuc ON danhmuc.id = chitietsanpham.danhmuc " +
+            "JOIN chatlieu ON chatlieu.id = chitietsanpham.chatlieu " +
+            "JOIN mausac ON mausac.id = chitietsanpham.mausac",
             nativeQuery = true)
     Page<ChiTieSanPhamCustom> findAllChiTietSanPhamCust(Pageable pageable);
 
+
     // Truy vấn để lấy sản phẩm bán chạy
-    @Query(value = "SELECT ctsp.Id as id, sp.tensanpham as tensanpham, h.tenhang as tenhang, s.ten as tensize, " +
-            "dm.ten as tendanhmuc, cl.ten as tenchatlieu, ms.ten as tenmausac, ctsp.idKhuyenMai as tenkhuyenmai, " +
-            "ctsp.gianhap as gianhap, ctsp.giaban as giaban, ctsp.qr as qr, ctsp.hinhanh as hinhanh, " +
-            "ctsp.soluong as soluong, ctsp.mota as mota, ctsp.ngaytao as ngaytao, ctsp.ngaysua as ngaysua, " +
-            "ctsp.trangthai as trangthai " +
-            "FROM ChiTietSanPham ctsp " +
-            "JOIN sanpham sp ON sp.id = ctsp.idSanPham " +
-            "JOIN hang h ON h.idHang = ctsp.hang " +
-            "JOIN size s ON s.id = ctsp.Size " +
-            "JOIN danhmuc dm ON dm.id = ctsp.DanhMuc " +
-            "JOIN chatlieu cl ON cl.id = ctsp.ChatLieu " +
-            "JOIN mausac ms ON ms.id = ctsp.MauSac " +
-            "ORDER BY ctsp.soluong DESC", // Giả định sản phẩm bán chạy được xác định bởi số lượng
+    @Query(value = "SELECT chitietsanpham.id, sanpham.tensanpham AS tensanpham, hang.tenhang AS tenhang, size.ten AS tensize, " +
+            "danhmuc.ten AS tendanhmuc, chatlieu.ten AS tenchatlieu, mausac.ten AS tenmausac, chitietsanpham.gianhap, " +
+            "chitietsanpham.giaban, chitietsanpham.qr AS qr, chitietsanpham.HinhAnh AS hinhanh, chitietsanpham.SoLuong, " +
+            "chitietsanpham.MoTa, chitietsanpham.NgayTao, chitietsanpham.ngaysua, chitietsanpham.trangthai " +
+            "FROM chitietsanpham " +
+            "JOIN sanpham ON sanpham.id = chitietsanpham.idsanpham " +
+            "JOIN hang ON hang.idhang = chitietsanpham.hang " +
+            "JOIN size ON size.id = chitietsanpham.size " +
+            "JOIN danhmuc ON danhmuc.id = chitietsanpham.danhmuc " +
+            "JOIN chatlieu ON chatlieu.id = chitietsanpham.chatlieu " +
+            "JOIN mausac ON mausac.id = chitietsanpham.mausac " +
+            "ORDER BY chitietsanpham.SoLuong DESC",
             nativeQuery = true)
     Page<ChiTieSanPhamCustom> findBestSellingProducts(Pageable pageable);
+
 
 
     //Lấy ra bằng màu sắc
@@ -147,6 +131,33 @@ public interface SanPhamChiTietRepository extends JpaRepository<ChiTietSanPham, 
             "JOIN mausac ON mausac.id = chitietsanpham.mausac \n" +
             "WHERE chitietsanpham.id = :id AND chitietsanpham.mausac = :mausac", nativeQuery = true)
     ChiTieSanPhamCustom getChiTietSanPhamCTByIdAndMauSac(UUID id, UUID mausac);
+
+
+    @Query(value = "SELECT ctsp.id AS id,\n" +
+            "       sp.tensanpham AS tensanpham,\n" +
+            "       h.tenhang AS tenhang,\n" +
+            "       s.ten AS tensize,\n" +
+            "       dm.ten AS tendanhmuc,\n" +
+            "       cl.ten AS tenchatlieu,\n" +
+            "       ms.ten AS tenmausac,\n" +
+            "       ctsp.gianhap AS gianhap,\n" +
+            "       ctsp.giaban AS giaban,\n" +
+            "       ctsp.qr AS qr,\n" +
+            "       ctsp.HinhAnh AS hinhanh,\n" +
+            "       ctsp.SoLuong AS soLuong,\n" +
+            "       ctsp.MoTa AS moTa,\n" +
+            "       ctsp.NgayTao AS ngayTao,\n" +
+            "       ctsp.ngaysua AS ngaysua,\n" +
+            "       ctsp.trangthai AS trangthai\n" +
+            "FROM chitietsanpham ctsp\n" +
+            "JOIN sanpham sp ON sp.id = ctsp.idsanpham\n" +
+            "JOIN hang h ON h.idhang = ctsp.hang\n" +
+            "JOIN size s ON s.id = ctsp.size\n" +
+            "JOIN danhmuc dm ON dm.id = ctsp.danhmuc\n" +
+            "JOIN chatlieu cl ON cl.id = ctsp.chatlieu\n" +
+            "JOIN mausac ms ON ms.id = ctsp.mausac\n" +
+            "WHERE ctsp.idsanpham = ?", nativeQuery = true)
+    List<ChiTieSanPhamCustom> getChiTietSanPhamByIdSanPham(@Param("idSanPham") UUID idSanPham);
 
 
 //

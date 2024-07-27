@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Hang {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID idhang;
     private String mahang;
     private String tenhang;

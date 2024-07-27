@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<body>
+<div layout:fragment="content">
+    <style>
+        .nav-tabs {
+            border-bottom: 1px solid #dee2e6;
+            border-radius: .5rem;
+        }
+
+        .nav-tabs .nav-link {
+            border: 1px solid transparent;
+            border-top-left-radius: .5rem;
+            border-top-right-radius: .5rem;
+        }
+
+        .nav-tabs .nav-link.active {
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
+
+        .tab-content {
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 .5rem .5rem;
+            padding: 1rem;
+        }
+
+        /* Đảm bảo các card có cùng kích thước */
+
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    </style>
+    <input type="hidden" id="idhoadon" th:value="${lstHD.getId()}">
+    <div class="card shadow container">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Xác nhận hóa đơn</h6>
+        </div>
+        <br>
+        <div th:each="ls:${lichSuTrangThai}">
+            <div>
+                    <span
+                            th:text="${ls.trangthai == 1 ? 'Đã Thanh Toán' :
+                                                                                                            (ls.trangthai == 2 ? 'Chưa Thanh Toán' :
+                                                                                                            (ls.trangthai == 3 ? 'Đang Vận Chuyển' :
+                                                                                                            (ls.trangthai == 0 ? 'Hóa Đơn Hủy' :
+                                                                                                            (ls.trangthai == 4 ? 'Đã Nhận' :
+                                                                                                            'Đang Xử Lí'))))}"></span>
+                <br>
+                <span th:text="${#dates.format(ls.thoigian,'dd/MM/yyy hh:mm:ss')}"></span>
+            </div>
+        </div>
+        <div class="card-body row">
+            <div class="col-4">
+                <button type="button" class="btn btn-danger" id="huydon" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                    Hủy đơn
+                </button>
+                <button class="btn btn-success" id="xacnhan" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Xác
+                    Nhận</button>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">In hóa
+                    đơn</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Ghi chú</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="cancelForm">
+                                    <div class="form-group">
+                                        <textarea class="form-control large-textarea" id="note" required></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn btn-primary" id="confirmCancel" >Thay đổi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class=" card shadow container">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Quản lý hóa đơn</h6>
+        </div>
+        <br>
+        <div class="card-body row">
+            <br>
+
+            <div class="table-responsive">
+                <p style="display: block; font-size: medium; margin: 5px;"><strong>Lịch sử thanh toán</strong>
+                </p>
+                <table class="table table-bordered mt-3 text-center " id="dataTable" width="100%" cellspacing="0" s>
+                    <thead style="background-color: rgb(240, 117, 69);">
+                    <tr>
+                        <th>Mã hóa đơn</th>
+                        <th>Tổng tiền</th>
+                        <th>Thời gian</th>
+                        <th>Hình thức thanh toán</th>
+                        <th>Trạng thái</th>
+                        <th>Ghi chú</th>
+                        <th>Người xác nhận</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Sử dụng vòng lặp Thymeleaf để duyệt danh sách khách hàng -->
+                    <tr th:each="hd : ${lstHD}">
+                        <td th:text="${hd.getMaHoaDon()}"></td>
+                        <td th:text="${hd.getThanhTien()}"></td>
+                        <td th:text="${hd.getNgayTao()}"></td>
+                        <td
+                                th:text="${hd.getLoaiThanhToan() ==1 ? 'Chuyển khoản':(hd.getLoaiThanhToan()==2?'Tiền mặt':'Thanh toán khi nhận hàng')}">
+                        </td>
+                        <td>
+                            <!-- Sử dụng biểu thức điều kiện Thymeleaf -->
+                            <span
+                                    th:text="${hd.getTrangThai() == 1 ? 'Đã Thanh Toán' :
+                                                                                                            (hd.getTrangThai() == 2 ? 'Chưa Thanh Toán' :
+                                                                                                            (hd.getTrangThai() == 3 ? 'Đang Vận Chuyển' :
+                                                                                                            (hd.getTrangThai() == 0 ? 'Hóa Đơn Hủy' :
+                                                                                                            (hd.getTrangThai() == 4 ? 'Đã Nhận' :
+                                                                                                            'Đang Xử Lí'))))}"></span>
+                        </td>
+                        <td th:text="${hd.getGhiChu()}"></td>
+                        <td th:text="${hd.getTenNhanVien()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="card shadow container">
+        <div class="row">
+            <div class="card shadow container">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Thông tin đơn hàng</h5>
+                    <button class="btn btn-warning ml-auto" data-bs-toggle="modal"
+                            data-bs-target="#capnhatlichsu">Cập nhật</button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 mb-3">
+                            <strong>Mã hóa đơn:</strong>
+                            <span th:text="${lichSu.getMaHoaDon()}"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <strong>Trạng thái:</strong>
+                            <span
+                                    th:text="${lichSu.getTrangThai() == 1 ? 'Đã Thanh Toán' :
+                                                                                                                    (lichSu.getTrangThai() == 2 ? 'Chờ xác nhận' :
+                                                                                                                    (lichSu.getTrangThai() == 3 ? 'Chờ lấy hàng' :
+                                                                                                                    (lichSu.getTrangThai() == 0 ? 'Chưa thanh toán' :
+                                                                                                                    (lichSu.getTrangThai() == 4 ? 'Đang giao hàng' :
+                                                                                                                    (lichSu.getTrangThai() == 5 ? 'Đã gia hàng' :
+                                                                                                                    'Trả hàng')))))}"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <strong>Loại hóa đơn:</strong>
+                            <span th:text="${lichSu.getLoaiHoaDon() == 1 ? 'Online' : 'Offline'}"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <strong>Tên khách hàng:</strong>
+                            <span th:text="${lichSu.getTenKhachHang()}"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <strong>Số điện thoại:</strong>
+                            <span th:text="${lichSu.getSdtKhachHang()}"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <strong>Địa chỉ:</strong>
+                            <span th:text="${lichSu.getDiaChi()}"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <strong>Email:</strong>
+                            <span th:text="${lichSu.getEmail()}"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <strong>Tên người giao:</strong>
+                            <span th:text="${lichSu.getTenNguoiGiao()}"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <strong>Số điện thoại người giao:</strong>
+                            <span th:text="${lichSu.getSdtNguoiGiao()}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="capnhatlichsu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Cập nhật thông tin</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" th:action="@{/updatehoadon}" th:object="${lichSu}" method="post">
+                        <div class="form-group">
+                            <label for="tenKhachHang">Tên khách hàng:</label>
+                            <input type="text" class="form-control" id="tenKhachHang"
+                                   th:attr="value=${lichSu.getTenKhachHang()}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="sdtKhachHang">Số điện thoại:</label>
+                            <input type="text" class="form-control" id="sdtKhachHang"
+                                   th:attr="value=${lichSu.getSdtKhachHang()}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="diaChi">Địa chỉ:</label>
+                            <input type="text" class="form-control" id="diaChi"
+                                   th:attr="value=${lichSu.getDiaChi()}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email"
+                                   th:attr="value=${lichSu.getEmail()}" />
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div layout:fragment="js">
+    <script>
+        const idHD = $('#idhoadon').val();
+        let tt;
+        $('#huydon').on('click', function () {
+            tt = 0;
+        });
+
+        $('#xacnhan').on('click', function () {
+            tt = 2;
+        });
+        document.getElementById('confirmCancel').addEventListener('click', function () {
+            var note = document.getElementById('note').value;
+            if (note.trim() === '') {
+                alert('Ghi chú không được để trống.');
+                return;
+            }
+            if (tt == 0) {
+                var lichSuTrangThaiRequest = {
+                    idhoadon: idHD,
+                    ghichu: note,
+                    trangthai: tt
+                };
+                if (confirm('Bạn có chắc chắn muốn hủy đơn không?')) {
+                    // Thực hiện AJAX hoặc hành động để thay đổi trạng thái hóa đơn
+                    // Ví dụ sử dụng AJAX
+                    $.ajax({
+                        type: 'POST',
+                        contentType: 'application/json',
+                        url: '/hoadon/doi-trang-thai', // Đường dẫn đến endpoint của controller Spring
+                        data: JSON.stringify(lichSuTrangThaiRequest), // Chuyển đổi đối tượng thành JSON
+                        success: function (response) {
+                            alert('Đơn đã được hủy thành công.');
+                            $('#cancelModal').modal('hide');
+                            // Đăng ký sự kiện chỉ 1 lần ngoài Ajax
+                            document.getElementById("confirmCancel").addEventListener("click", function () {
+                                document.getElementById("note").value = "";
+                            });
+                            // Chuyển hướng trang
+                            window.location.href = '/hoadon/' + idHD;
+                            // Thực hiện các thao tác khác nếu cần
+                        },
+                        error: function (error) {
+                            alert('Có lỗi xảy ra, vui lòng thử lại.');
+                            window.location.href = '/hoadon/' + idHD;
+
+                            console.error(JSON.stringify(lichSuTrangThaiRequest)); // In ra lỗi chi tiết để debug
+                            // Đăng ký sự kiện chỉ 1 lần ngoài Ajax
+                            document.getElementById("confirmCancel").addEventListener("click", function () {
+                                document.getElementById("note").value = "";
+                            });
+                        }
+                    });
+                }
+            } else if (tt == 2) {
+                var lichSuTrangThaiRequest = {
+                    idhoadon: idHD,
+                    ghichu: note,
+                    trangthai: tt
+                };
+                if (confirm('Bạn có chắc chắn muốn đổi trạng thái không?')) {
+                    // Thực hiện AJAX hoặc hành động để thay đổi trạng thái hóa đơn
+                    // Ví dụ sử dụng AJAX
+
+                    $.ajax({
+                        type: 'POST',
+                        contentType: 'application/json',
+                        url: '/hoadon/doi-trang-thai', // Đường dẫn đến endpoint của controller Spring
+                        data: JSON.stringify(lichSuTrangThaiRequest), // Chuyển đổi đối tượng thành JSON
+                        success: function (response) {
+                            alert('Đơn đã chuyển sang trạng thái chờ lấy hàng');
+                            $('#cancelModal').modal('hide');
+                            // Đăng ký sự kiện chỉ 1 lần ngoài Ajax
+                            document.getElementById("confirmCancel").addEventListener("click", function () {
+                                document.getElementById("note").value = "";
+                            });
+                            // Chuyển hướng trang
+                            window.location.href = '/hoadon/' + idHD;
+                            // Thực hiện các thao tác khác nếu cần
+                        },
+                        error: function (error) {
+                            alert('Có lỗi xảy ra, vui lòng thử lại.');
+                            window.location.href = '/hoadon/' + idHD;
+                            console.error(JSON.stringify(lichSuTrangThaiRequest)); // In ra lỗi chi tiết để debug
+                            // Đăng ký sự kiện chỉ 1 lần ngoài Ajax
+                            document.getElementById("confirmCancel").addEventListener("click", function () {
+                                document.getElementById("note").value = "";
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+</div>
+</body>
+
+</html>

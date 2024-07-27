@@ -1,5 +1,6 @@
 package poly.edu.duantotnghiep.Service.Iml;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import poly.edu.duantotnghiep.infrastructures.request.KhachHangRequest;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -144,6 +146,51 @@ public class KhachHangIml implements KhachHangService {
     @Override
     public boolean existsByEmail(String email) {
         return khachHangRepository.existsByEmail(email);
+    }
+
+    @Override
+    public void add1(KhachHang kh) {
+        khachHangRepository.save(kh);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        khachHangRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(KhachHang kh, UUID id) {
+        KhachHang khachHang =detail(id);
+
+        khachHang.setMakhachhang(kh.getMakhachhang());
+        khachHang.setTenkhachhang(kh.getTenkhachhang());
+        khachHang.setLoaikhachhang(kh.getLoaikhachhang());
+        khachHang.setDiachi(kh.getDiachi());
+        khachHang.setNgaysinh(kh.getNgaysinh());
+        khachHang.setEmail(kh.getEmail());
+        khachHang.setTrangthai(kh.getTrangthai());
+        khachHang.setMatkhau(kh.getMatkhau());
+        khachHang.setSdt(kh.getSdt());
+        khachHangRepository.save(khachHang);
+    }
+
+    @Override
+    public KhachHang detail(UUID id) {
+        Optional<KhachHang> otp = khachHangRepository.findById(id);
+        if(otp.isPresent()){
+            return otp.get();
+        }
+        return null;
+    }
+    @Override
+    public boolean emailValidate(String email) {
+        EmailValidator emailValidator = EmailValidator.getInstance();
+        return emailValidator.isValid(email);
+    }
+
+    @Override
+    public UUID getIdKhachHangByIdHoaDon(UUID id) {
+        return khachHangRepository.getIdKhachHangByIdHoaDon(id);
     }
 
 }

@@ -17,12 +17,13 @@ public class ChiTietSanPham {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String idsanpham;
-    private String size;
-    private String danhmuc;
-    private String chatlieu;
-    private String mausac;
-    private String idkhuyenmai;
+    private UUID idsanpham;
+    private UUID hang;
+    private UUID size;
+    private UUID danhmuc;
+    private UUID chatlieu;
+    private UUID mausac;
+    private UUID idkhuyenmai;
     private Float gianhap;
     private Float giaban;
     @Column(name = "QR", insertable = false, updatable = false)

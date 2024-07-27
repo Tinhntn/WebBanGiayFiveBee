@@ -45,4 +45,8 @@ public interface KhachHangRepository  extends JpaRepository<KhachHang, UUID> {
             "WHERE makhachhang = ?;", nativeQuery = true)
     KhachHang getKhachHangByMakhachhang(String maKhachHang);
 
+    @Query(value = "select idkhachhang from hoadon\n" +
+            "where id = :idhoadon",nativeQuery =true)
+    UUID getIdKhachHangByIdHoaDon(@Param("idhoadon")UUID id);
+
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Controller
-@RequestMapping("")
+@RequestMapping("/home")
 public class HomeController {
 
     @GetMapping("/trangchu")
@@ -21,7 +21,17 @@ public class HomeController {
 //        model.addAttribute("listTrangChu", firstEightProducts);
 //        model.addAttribute("listBanChay", sanPhamService.getListBanChay(""));
 //        model.addAttribute("viewBanner", "/views/user/banner.jsp");
-        model.addAttribute("viewContent", "/views/CTSP.jsp");
+        model.addAttribute("viewContent", "/WEB-INF/views/banhangtaiquay.html");
         return "layout";
+    }
+
+    @GetMapping("/hienthi")
+    public String home(Model model) {
+        return "home";
+    }
+
+    @GetMapping("/otherpage")
+    public String otherPage(Model model) {
+        return "otherpage";
     }
 }

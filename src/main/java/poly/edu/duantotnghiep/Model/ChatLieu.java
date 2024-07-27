@@ -15,10 +15,11 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ChatLieu {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String ma;
     private String ten;
     private Date ngaytao;
     private Date ngaysua;
+    private int trangthai;
 }

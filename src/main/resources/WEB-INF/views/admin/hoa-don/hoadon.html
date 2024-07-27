@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/main}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .nav-tabs {
+            border-bottom: 1px solid #dee2e6;
+            border-radius: .5rem;
+        }
+
+        .nav-tabs .nav-link {
+            border: 1px solid transparent;
+            border-top-left-radius: .5rem;
+            border-top-right-radius: .5rem;
+        }
+
+        .nav-tabs .nav-link.active {
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
+
+        .tab-content {
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 .5rem .5rem;
+            padding: 1rem;
+        }
+
+        /* Đảm bảo các card có cùng kích thước */
+
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+    <div class=" card shadow container" layout:fragment="content">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Quản lý hóa đơn</h6>
+        </div>
+        <br>
+        <div class="card-body row">
+            <br>
+            <!-- Thêm thông báo thành công và lỗi nếu cần -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview" role="tab"
+                        aria-controls="overview" aria-selected="true">Tổng quan</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="shipping-tab" data-bs-toggle="tab" href="#shipping" role="tab"
+                        aria-controls="shipping" aria-selected="false">Vận chuyển</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="success-tab" data-bs-toggle="tab" href="#success" role="tab"
+                        aria-controls="success" aria-selected="false">Thành công</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-5" style="width: 290px;">
+                            <div class="card bg-light text-bg-dark h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-cart-check"></i>
+                                    <h5 class="card-title" style="color: black;"> Hóa đơn online</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-5" style="width: 290px;">
+                            <div class="card bg-light text-white h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: black;">Tổng tiền</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-5" style="width: 290px;">
+                            <div class="card bg-light text-bg-dark h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: black;">Thanh toán VNpay</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-5" style="width: 290px;">
+                            <div class="card bg-light text-white h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: black;">Thanh toán khi nhận hàng</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-2 col-sm-4" style="width: 220px;">
+                            <div class="card bg-warning text-white h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Chưa Thanh Toán</h5>
+                                    <p class="card-text">Số lượng: <span id="unpaid-count"
+                                            th:text="${hoaDonDaChuaThanhToan}"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-4" style="width: 220px;">
+                            <div class="card bg-dark text-white h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Đã Thanh Toán</h5>
+                                    <p class="card-text">Số lượng: <span id="paid-count"
+                                            th:text="${hoaDonDaThanhToan}"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-4" style="width: 220px;">
+                            <div class="card bg-info text-white h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Đang Vận Chuyển</h5>
+                                    <p class="card-text">Số lượng: <span id="shipping-count"
+                                            th:text="${hoaDonDangGiao}"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-4" style="width: 220px;">
+                            <div class="card bg-danger text-white h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Hóa Đơn Hủy</h5>
+                                    <p class="card-text">Số lượng: <span id="cancelled-count"
+                                            th:text="${hoaDonDaHuy}"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-4" style="width: 220px;">
+                            <div class="card bg-secondary text-white h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Đã Nhận</h5>
+                                    <p class="card-text">Số lượng: <span id="received-count"
+                                            th:text="${hoaDonDaGiao}"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="table-responsive">
+                        <p style="display: block; font-size: medium; margin: 5px;"><strong>Tất cả hóa đơn</strong></p>
+                        <table class="table table-bordered mt-3 text-center " id="dataTable" width="100%"
+                            cellspacing="0" s>
+                            <thead style="background-color: rgb(240, 117, 69);">
+                                <tr>
+                                    <th>Mã Hóa Đơn</th>
+                                    <th>Tên Nhân Viên</th>
+                                    <th>Tên Khách Hàng</th>
+                                    <th>Tên Khuyến Mãi</th>
+                                    <th>Tổng Tiền</th>
+                                    <th>Tổng Tiền Giảm</th>
+                                    <th>Thành Tiền</th>
+                                    <th>Ngày Tạo</th>
+                                    <th>Loại hóa đơn</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <!-- Sử dụng vòng lặp Thymeleaf để duyệt danh sách khách hàng -->
+                                <tr th:each="hd : ${lstHD}">
+                                    <td th:text="${hd.getMaHoaDon() != null ? hd.getMaHoaDon() : ''}"></td>
+                                    <td th:text="${hd.getTenNhanVien() != null ? hd.getTenNhanVien() : ''}"></td>
+                                    <td th:text="${hd.getTenKhachHang() != null ? hd.getTenKhachHang() : ''}"></td>
+                                    <td th:text="${hd.getTenKhuyenMai() != null ? hd.getTenKhuyenMai() : ''}"></td>
+                                    <td th:text="${hd.getThanhTien() != null ? hd.getThanhTien() : ''}"></td>
+                                    <td th:text="${hd.getTongTien() != null ? hd.getTongTien() : ''}"></td>
+                                    <td th:text="${hd.getTongTienGiam() != null ? hd.getTongTienGiam() : ''}"></td>
+                                    <td th:text="${hd.getNgayTao() != null ? #dates.format(hd.getNgayTao(), 'dd/MM/yyyy hh:mm:ss') : ''}"></td>
+                                    <td th:text="${hd.getLoaiHoaDon() != null ? (hd.getLoaiHoaDon() == 1 ? 'Online' : 'Offline') : ''}"></td>
+                                    <td>
+        <span
+                th:text="${hd.getTrangThai() != null ?
+                        (hd.getTrangThai() == 1 ? 'Đã Thanh Toán' :
+                        (hd.getTrangThai() == 2 ? 'Chưa Thanh Toán' :
+                        (hd.getTrangThai() == 3 ? 'Đang Vận Chuyển' :
+                        (hd.getTrangThai() == 0 ? 'Hóa Đơn Hủy' :
+                        (hd.getTrangThai() == 4 ? 'Đã Nhận' :
+                        'Đang Xử Lí'))))) : ''}">
+        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-warning btn-detail" th:if="${hd.getId() != null}" th:data-id="${hd.getId()}">Chi tiết</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Phân trang -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                <a class="page-link" th:href="@{/hoadon(page=${currentPage - 1})}"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{/hoadon(page=${i})}" th:text="${i + 1}">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                                <a class="page-link" th:href="@{/hoadon(page=${currentPage + 1})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
+                    <h4>Vận chuyển</h4>
+                    <p>Nội dung phần Vận chuyển.</p>
+                </div>
+                <div class="tab-pane fade" id="success" role="tabpanel" aria-labelledby="success-tab">
+                    <h4>Thành công</h4>
+                    <p>Nội dung phần Thành công.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div layout:fragment="js">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                // Bắt sự kiện khi nhấn vào nút "Chi tiết"
+                $('.btn-detail').click(function () {
+                    // Lấy ID của hóa đơn
+                    var idHoaDon = $(this).data('id');
+                    console.log(idHoaDon); // Kiểm tra xem id có được lấy đúng không
+
+                    // Chuyển hướng đến trang chi tiết hóa đơn
+                    var uuidPattern = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+                      if (uuidPattern.test(idHoaDon)) {
+                        // Chuyển hướng đến trang chi tiết hóa đơn
+                        window.location.href = '/hoadon/' + idHoaDon;
+                    } else {
+                        alert("ID hóa đơn không hợp lệ" + idHoaDon);
+                    }
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>

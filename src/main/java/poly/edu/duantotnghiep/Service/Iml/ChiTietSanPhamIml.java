@@ -62,6 +62,12 @@ public class ChiTietSanPhamIml implements ChiTietSanPhamService {
     public ChiTietSanPham updateSLSP(ChiTietSanPham chiTietSanPham) {
         return sanPhamChiTietRepository.save(chiTietSanPham);
     }
+
+    @Override
+    public List<ChiTieSanPhamCustom> getChiTietSanPhamByIdSanPham(UUID idSanPham) {
+        return sanPhamChiTietRepository.getChiTietSanPhamByIdSanPham(idSanPham);
+    }
+
 //    public Page<ChiTieSanPhamCustom> searchByTen(String tenSanPham, Pageable pageable) {
 //        return sanPhamChiTietRepository.searchByTen(tenSanPham, pageable);
 //    }
@@ -79,6 +85,22 @@ public class ChiTietSanPhamIml implements ChiTietSanPhamService {
     @Override
     public ChiTieSanPhamCustom getChiTietSanPhamCTByIdAndMauSac(UUID id, UUID mausac) {
         return sanPhamChiTietRepository.getChiTietSanPhamCTByIdAndMauSac(id, mausac);
+    }
+
+
+    @Override
+    public void addChiTietSanPham(ChiTietSanPham chiTietSanPham) {
+        sanPhamChiTietRepository.save(chiTietSanPham);
+    }
+
+    @Override
+    public void deleteCTSanPham(UUID id) {
+        sanPhamChiTietRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateChiTietSanPham(ChiTietSanPham chiTietSanPham, UUID id) {
+        sanPhamChiTietRepository.save(chiTietSanPham);
     }
 
 

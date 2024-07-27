@@ -1,3 +1,0 @@
-window.NhanVienController = function($scope){
-
-}

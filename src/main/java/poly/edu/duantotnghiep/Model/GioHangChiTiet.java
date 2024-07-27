@@ -21,6 +21,7 @@ public class GioHangChiTiet {
     private String idchitietsanpham;
     private int soluong;
     private Float dongia;
+    private Float tongtien;
     private Float dongiakhigiam;
     private Date ngaytao;
     private Date ngaysua;

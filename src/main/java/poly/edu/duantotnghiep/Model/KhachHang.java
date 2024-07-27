@@ -2,6 +2,7 @@ package poly.edu.duantotnghiep.Model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class KhachHang {
     private String email;
     private String matkhau;
     private String sdt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date ngaysinh;
     private Date ngaythamgia;
     private int tichdiem;

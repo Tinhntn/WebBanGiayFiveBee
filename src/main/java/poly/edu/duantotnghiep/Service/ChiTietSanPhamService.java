@@ -16,6 +16,9 @@ public interface ChiTietSanPhamService {
     ChiTietSanPham getChiTietSanPhamById(UUID idctsanpham);
     ChiTieSanPhamCustom getChiTietCustomSanPhamById(UUID idctsp);
     ChiTietSanPham updateSLSP(ChiTietSanPham chiTietSanPham);
+
+    List<ChiTieSanPhamCustom> getChiTietSanPhamByIdSanPham(UUID idSanPham);
+
 //    Page<ChiTieSanPhamCustom> searchByTen(String tenSanPham, Pageable pageable);
 
     //Bán hàng online
@@ -26,5 +29,11 @@ public interface ChiTietSanPhamService {
 
     //Lấy ra bằng màu sắc
     ChiTieSanPhamCustom getChiTietSanPhamCTByIdAndMauSac(UUID id, UUID mausac);
+
+    void addChiTietSanPham(ChiTietSanPham chiTietSanPham);
+
+    void deleteCTSanPham(UUID id);
+
+    void updateChiTietSanPham(ChiTietSanPham chiTietSanPham, UUID id);
 
 }

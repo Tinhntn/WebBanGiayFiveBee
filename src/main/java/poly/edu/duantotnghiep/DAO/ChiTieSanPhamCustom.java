@@ -5,6 +5,12 @@ import java.util.UUID;
 
 public interface ChiTieSanPhamCustom {
      UUID getId();
+     UUID getIdSanPham();
+     UUID getHang();
+     UUID getSize();
+     UUID getChatLieu();
+     UUID getDanhMuc();
+     UUID getMauSac();
      String getTenSanPham();
      String getTenHang();
      String getTenSize();

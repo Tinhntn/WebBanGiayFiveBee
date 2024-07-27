@@ -1,6 +1,11 @@
 package poly.edu.duantotnghiep.Service.Iml;
 
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import poly.edu.duantotnghiep.DAO.HoaDonCustom;
+import poly.edu.duantotnghiep.DAO.HoaDonLichSuCustom;
 import poly.edu.duantotnghiep.Model.ChiTietHoaDon;
 import poly.edu.duantotnghiep.Model.ChiTietSanPham;
 
@@ -44,6 +49,11 @@ public class HoaDonIml implements HoaDonService {
     }
 
     @Override
+    public HoaDon tao(HoaDon hoaDon) {
+        return hoaDonRepository.save(hoaDon);
+    }
+
+    @Override
     public ChiTietHoaDon findbyid(UUID id) {
         return chiTietHoaDonRepository.findById(id).orElse(null);
     }
@@ -51,6 +61,12 @@ public class HoaDonIml implements HoaDonService {
     public List<HoaDon> getAllHoaDoncho() {
         return null;
     }
+
+    @Override
+    public HoaDon getAllHoaDonById(UUID id) {
+        return hoaDonRepository.getAllHoaDonByid(id);
+    }
+
     @Override
     public HoaDon taohoadon(HoaDon hd) {
         String maHoaDon = "HD" + String.format("%05d", (int) (Math.random() * 100000));
@@ -98,5 +114,51 @@ public class HoaDonIml implements HoaDonService {
     }
 
 
+    @Override
+    public long hoadonchuathanhtoan() {
+        return hoaDonRepository.demSoLuongHoaDonTheoTrangThai(2);
+    }
+
+    @Override
+    public long hoadondathanhtoan() {
+        return hoaDonRepository.demSoLuongHoaDonTheoTrangThai(1);
+    }
+
+    @Override
+    public long hoadondangiao() {
+        return hoaDonRepository.demSoLuongHoaDonTheoTrangThai(3);
+    }
+
+    @Override
+    public long hoadondagiao() {
+        return hoaDonRepository.demSoLuongHoaDonTheoTrangThai(4);
+    }
+
+    @Override
+    public long hoadondahuy() {
+        return hoaDonRepository.demSoLuongHoaDonTheoTrangThai(0);
+    }
+
+    @Override
+    public HoaDonCustom getHoaDonByIdHoaDon(UUID id) {
+        return hoaDonRepository.getHoaDonByIdHoaDon(id);
+    }
+
+    @Override
+    public HoaDonLichSuCustom getLichSu(UUID id) {
+        return hoaDonRepository.getLichSuHoaDon(id);
+    }
+
+    @Override
+    public void HuyDon(UUID idhoadon) {
+        HoaDon hoaDon = hoaDonRepository.findById(idhoadon).orElseThrow(()->new RuntimeException());
+        hoaDon.setTrangthai(0);
+    }
+    @Override
+    public Page<HoaDonCustom> getAllHoaDonDaThanhToan(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+
+        return hoaDonRepository.getAllHoaDonDaThanhToan(pageable);
+    }
 
 }

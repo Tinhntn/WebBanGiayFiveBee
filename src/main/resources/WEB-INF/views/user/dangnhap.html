@@ -1,0 +1,212 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/mainUser.html}">
+
+<body>
+    <style>
+        form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <div layout:fragment="content">
+        <div class="container">
+            <div class="row mt-5 col-6 offset-3">
+                <div>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active text-dark" id="login-tab" data-bs-toggle="tab" href="#login"
+                                role="tab" aria-controls="login" aria-selected="true">Đăng Nhập</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link text-dark" id="register-tab" data-bs-toggle="tab" href="#register"
+                                role="tab" aria-controls="register" aria-selected="false">Đăng Ký</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                            <form id="loginForm">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="loginEmail" class="form-label">Email (*)</label>
+                                        <input type="email" class="form-control" id="loginEmail"
+                                            aria-describedby="emailHelp" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="loginPassword" class="form-label">Mật Khẩu (*)</label>
+                                        <input type="password" class="form-control" id="loginPassword" />
+                                    </div>
+                                </div>
+                                <br />
+                                <div id="loginError" class="alert alert-danger" style="display: none;"></div>
+                                <button type="button" class="btn btn-dark mt-5" onclick="login()">Đăng Nhập</button>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                            <form id="registrationForm">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="registerName" class="form-label">Họ Và Tên (*)</label>
+                                        <input type="text" class="form-control" id="registerName" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="registerEmail" class="form-label">Email (*)</label>
+                                        <input type="email" class="form-control" id="registerEmail" />
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-6">
+                                        <label for="registerPassword" class="form-label">Mật Khẩu (*)</label>
+                                        <input type="password" class="form-control" id="registerPassword" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="confirmPassword" class="form-label">Xác nhận Mật Khẩu (*)</label>
+                                        <input type="password" class="form-control" id="confirmPassword">
+                                    </div>
+                                </div>
+                                <div class="flex items-center mt-3">
+                                    <div class="flex items-center">
+                                        <label class="label-nho text-base">
+                                            <input type="checkbox" id="accept" name="accept" value="ok"
+                                                class="hidden-checkbox">
+                                            <span class="checkmark rounded"></span>
+                                            Tôi đồng ý với Chính sách bảo mật và Chính sách đổi trả của Leninn Skateshop
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="registrationError" class="alert alert-danger" style="display: none;"></div>
+                                <button type="button" class="btn btn-dark mt-5" onclick="register()">Đăng Ký</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div layout:fragment="js">
+        <script>
+            function login() {
+                var email = $('#loginEmail').val();
+                var matKhau = $('#loginPassword').val();
+                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emailPattern.test(email)) {
+                    $.ajax({
+                        url: '/dang-nhap',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ email: email, matKhau: matKhau }),
+                        success: function (response) {
+                            // Xử lý khi đăng nhập thành công
+                            // Xử lý khi đăng ký thành công
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Đăng nhập thành công',
+                                text: response.message,
+                            });
+                            window.location.href = '/trangchuuser/hienthi';
+                        },
+                        error: function (xhr) {
+                            try {
+                                var error = JSON.parse(xhr.responseText);
+                                $('#loginError').text(error.message).show();
+                            } catch (e) {
+                                $('#loginError').text('Đã xảy ra lỗi không xác định.').show();
+                            }
+                            hideErrorMessage();
+                        }
+                    });
+                } else {
+                    console.log('Email không hợp lệ')
+                    $('#loginError').text('Email không đúng định dạng').show();
+                    hideErrorMessage();
+                }
+
+            }
+
+            function register() {
+                var hoTen = $('#registerName').val();
+                var email = $('#registerEmail').val();
+                var matKhau = $('#registerPassword').val();
+                var confirmPassword = $('#confirmPassword').val();
+                var accept = $('#accept').is(':checked');
+                if (!accept) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cảnh báo',
+                        text: 'Vui lòng đồng ý với các chính sách trước khi đăng ký.',
+                    });
+                    return;
+                }
+
+                if (matKhau !== confirmPassword) {
+                    alert("Mật khẩu và xác nhận mật khẩu phải trùng nhau.");
+                    return;
+                }
+
+                $.ajax({
+                    url: '/dang-ky',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ hoTen: hoTen, emailDK: email, matKhauDK: matKhau }),
+                    success: function (response) {
+// Xử lý khi đăng ký thành công
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Đăng ký thành công',
+                            text: response.message,
+                        });
+                        $('#registerName').val('');
+                        $('#registerEmail').val('');
+                        $('#registerPassword').val('');
+                        $('#confirmPassword').val('');
+                        $('#accept').prop('checked', false);
+                        setTimeout(function () {
+                            $('#login-tab').tab('show');
+                        }, 500);
+                    },
+                    error: function (xhr) {
+                        try {
+                            var error = JSON.parse(xhr.responseText);
+                            $('#registrationError').text(error.message).show();
+                        } catch (e) {
+                            $('#registrationError').text('Đã xảy ra lỗi không xác định.').show();
+                        }
+                        hideErrorMessage();
+                    }
+                });
+            }
+
+            $(document).ready(function () {
+                hideErrorMessage();
+                hideErrorMessage2();
+
+                var hash = window.location.hash;
+                if (hash) {
+                    $('.nav-link').removeClass('active');
+                    $('.tab-pane').removeClass('active show');
+                    $('a[href="' + hash + '"]').addClass('active');
+                    $(hash).addClass('active show');
+                }
+            });
+
+            function hideErrorMessage() {
+                setTimeout(function () {
+                    $('.alert-danger').fadeOut('slow');
+                }, 5000);
+            }
+
+            function hideErrorMessage2() {
+                setTimeout(function () {
+                    $('.alert-success').fadeOut('slow');
+                }, 5000);
+            }
+        </script>
+    </div>
+
+</body>
+
+</html>

@@ -20,8 +20,6 @@ public interface ChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDon, UU
 
     List<ChiTietHoaDon> findByIdhoadon(UUID hoaDonId);
 
-
-
     @Query(value = "SELECT ctsp.hinhanh as hinhanh, hd.id as idhoadon ,cthd.id AS id, cthd.idchitietsanpham AS idChiTietSanPham ,\n" +
             "    hd.mahoadon AS maHoaDon, \n" +
             "    sp.tensanpham AS tenSanPham, \n" +

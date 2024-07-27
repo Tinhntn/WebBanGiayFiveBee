@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/mainUser}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+<div th:fragment="modalContent">
+    <h2>Thông tin hóa đơn</h2>
+    <p>Ngày tạo : <span th:text="${hoaDon.ngaytao}"></span></p>
+    <p>Tên người nhận : <span th:text="${hoaDon.tennguoinhan}"></span></p>
+    <p>Địa chỉ : <span th:text="${hoaDon.tinhthanh} + ' ' + ${hoaDon.quanhuyen}+ ' ' +${hoaDon.phuongxa}"></span></p>
+    <p>Phí ship : <span th:text="${hoaDon.phiship}"></span></p>
+    <p>Tổng tiền: <span th:text="${hoaDon.thanhtien}"></span></p>
+    <h2>Danh sách sản phẩm</h2>
+    <table class="table table-header">
+        <thead>
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+            <th>Hình ảnh</th>
+            <th>Size</th>
+            <th>Hãng</th>
+            <th>Chất liệu</th>
+            <th>Màu sắc</th>
+            <th>Danh mục</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="CTHoaDon : ${chiTietHoaDonList}">
+            <td th:text="${CTHoaDon.tenSanPham}"></td>
+            <td th:text="${CTHoaDon.soluong}"></td>
+            <td th:text="${CTHoaDon.dongia} + ' VNĐ'"></td>
+            <td>
+                <img th:src="${CTHoaDon.hinhAnh}" alt="Ảnh sản phẩm" style="width: 100px; height: 100px">
+            </td>
+            <td th:text="${CTHoaDon.size}"></td>
+            <td th:text="${CTHoaDon.chatLieu}"></td>
+            <td th:text="${CTHoaDon.hang}"></td>
+            <td th:text="${CTHoaDon.mauSac}"></td>
+            <td th:text="${CTHoaDon.danhMuc}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- Thêm thông tin khác nếu cần -->
+</div>
+    <!-- Nội dung của các tab -->
+</body>
+</html>

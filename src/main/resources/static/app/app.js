@@ -5,7 +5,7 @@ myApp.config(function ($routeProvider){
         .when(
             '/home',
             {
-                templateUrl:'views/index.jsp',
+                templateUrl:'views/adminLayout.jsp',
                 controller: 'mainController'
             }
         )

@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class SanPham {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String masanpham;
     private String tensanpham;

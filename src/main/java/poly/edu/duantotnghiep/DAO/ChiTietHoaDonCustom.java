@@ -13,7 +13,7 @@ public interface ChiTietHoaDonCustom {
     String getTenSanPham();
     int getSoluong();
     String getHinhAnh();
-    double getDongia();
+    float getDongia();
     String getSize();
     String getHang();
     String getDanhMuc();

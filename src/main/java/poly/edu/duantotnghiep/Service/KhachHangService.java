@@ -34,9 +34,16 @@ public interface KhachHangService {
     boolean existsByEmail(String email);
     List<KhachHang> getALlKH();
 
+    boolean emailValidate(String email);
+
 
 
     KhachHang getKhachHangByMakhachhang(String maKhachHang);
 
+    void add1(KhachHang kh);
+    void delete(UUID id);
+    void update(KhachHang kh,UUID id);
+    KhachHang detail(UUID id);
 
+    UUID getIdKhachHangByIdHoaDon(UUID id);
 }

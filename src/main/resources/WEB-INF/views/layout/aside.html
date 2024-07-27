@@ -1,0 +1,58 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div th:fragment="aside">
+    <style>
+        .custom-btn {
+            border-radius: 10px;
+            border: black 1px solid;
+            height: 50px;
+        }
+        .custom-btn .btn {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mb-2 custom-btn">
+                    <a href="/khach-hang/index1" class="btn btn-light w-100">Quản lý khách hàng </a>
+                </div>
+
+                <div class="mb-2 custom-btn">
+                    <a href="/hoadononline/hienthi" class="btn btn-light w-100">Quản lý hóa đơn online </a>
+                </div>
+                <div class="mb-2 custom-btn">
+                    <a href="/nhan-vien/hien-thi" class="btn btn-light w-100">Quản lý nhân viên</a>
+                </div>
+                <div class="mb-2 custom-btn">
+                    <a href="/sanpham/hienthi" class="btn btn-light w-100">Quản lý sản phẩm</a>
+                </div>
+                <div class="mb-2 custom-btn">
+                    <a href="/voucher/hien-thi" class="btn btn-light w-100">Quản lý voucher</a>
+                </div>
+                <div class="mb-2 custom-btn">
+                    <a href="/banhangtaiquay/hienthi" class="btn btn-light w-100">Quản lý bán hàng</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+</body>
+</html>

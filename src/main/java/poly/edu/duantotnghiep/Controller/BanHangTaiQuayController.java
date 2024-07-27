@@ -86,7 +86,9 @@ import java.util.regex.Pattern;
         //list hoadon
         List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
         model.addAttribute("listMaHoaDon", list);
-        return "banhangtaiquay";
+
+
+        return "admin/banhangtaiquay/banhangtaiquay";
     }
 
     @PostMapping("/taoHoaDon")
@@ -124,13 +126,18 @@ import java.util.regex.Pattern;
         ChiTietHoaDon chiTietHoaDon = chiTietHoaDonService.findById(id);
         UUID idCTSP = chiTietHoaDon.getIdchitietsanpham();
         ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getChiTietSanPhamById(idCTSP);
-        float soLuongCTSP = chiTietSanPham.getSoluong();
+        int soLuongHDCT = chiTietHoaDonRepository.getSoLuongById(id);
+        int soLuongCTSP = chiTietSanPham.getSoluong();
+        int tongKho = soLuongCTSP + soLuongHDCT;
+        model.addAttribute("tongkho",tongKho);
+
 
         idHoaDon = chiTietHoaDonRepository.findHoaDonIdByChiTietId(id);
         if (soLuong > soLuongCTSP) {
-            redirectAttributes.addFlashAttribute("error", "Tiền khách đưa phải lớn hơn 0.");
+            redirectAttributes.addFlashAttribute("error", "Số lượng trong kho không đủ .");
             return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
         }
+        chiTietHoaDon.setDongia(chiTietSanPham.getGiaban()*soLuong);
         chiTietSanPhamService.updateChiTietSanPhamSuaCTHD(id, soLuong);
         chiTietHoaDonService.updateSoLuongHoaDonChiTietById(id, soLuong);
 
@@ -139,101 +146,130 @@ import java.util.regex.Pattern;
     }
 
 
-    @GetMapping("/detailhd/{id}")
-    public String detailHD(@PathVariable String id, Model model, @RequestParam(defaultValue = "0") int page) {
-        HoaDon hd = hoaDonService.detailHD(UUID.fromString(id));
-        model.addAttribute("hoadon", hd);
-        Float tongtienhd = hoaDonService.hienthiTongTienHD(UUID.fromString(id));
-        model.addAttribute("tongtienhd", tongtienhd);
-        UUID idKhachHang = hd.getIdkhachhang();
-        UUID idKhuyenMai = hd.getIdkhuyenmai();
+        @GetMapping("/detailhd/{id}")
+        public String detailHD(@PathVariable String id, Model model, @RequestParam(defaultValue = "0") int page) {
+            // Lấy thông tin hóa đơn từ dịch vụ
+            HoaDon hd = hoaDonService.detailHD(UUID.fromString(id));
+            model.addAttribute("hoadon", hd);
 
-        if (idKhuyenMai != null) {
-            KhuyenMai km = khuyenMaiRepository.findById(idKhuyenMai).orElse(null);
-            String maKM = km.getMakhuyenmai();
-            model.addAttribute("maKM", maKM);
-            Float gtg = km.getGiatri();
-            model.addAttribute("gtg", gtg);
-            Float tongtientt = tongtienhd - gtg;
-            model.addAttribute("tttt", tongtientt);
-        } else {
+            // Lấy tổng tiền hóa đơn từ dịch vụ
+            Float tongtienhd = hoaDonService.hienthiTongTienHD(UUID.fromString(id));
+
+            // Kiểm tra giá trị tongtienhd trước khi thêm vào model
             if (tongtienhd != null) {
-                Float tongtientt = tongtienhd - 0;
+                model.addAttribute("tongtienhd", tongtienhd);
+            } else {
+                // Xử lý trường hợp tongtienhd là null (ví dụ: đặt giá trị mặc định hoặc thông báo lỗi)
+                model.addAttribute("tongtienhd", 0.0f); // giá trị mặc định
+            }
+
+            UUID idKhachHang = hd.getIdkhachhang();
+            UUID idKhuyenMai = hd.getIdkhuyenmai();
+
+            if (idKhuyenMai != null) {
+                KhuyenMai km = khuyenMaiRepository.findById(idKhuyenMai).orElse(null);
+                if (km != null) {
+                    String maKM = km.getMakhuyenmai();
+                    model.addAttribute("maKM", maKM);
+                    Float gtg = km.getGiatri();
+                    model.addAttribute("gtg", gtg);
+
+                    // Tính toán tổng tiền thanh toán sau khi áp dụng khuyến mãi
+                    Float tongtientt = (tongtienhd != null ? tongtienhd : 0.0f) - (gtg != null ? gtg : 0.0f);
+                    model.addAttribute("tttt", tongtientt);
+                }
+            } else {
+                // Tính toán tổng tiền thanh toán khi không có khuyến mãi
+                Float tongtientt = (tongtienhd != null ? tongtienhd : 0.0f);
                 model.addAttribute("tttt", tongtientt);
             }
+
+            if (idKhachHang != null) {
+                KhachHang khachHang = khachHangRepository.findById(idKhachHang).orElse(null);
+                if (khachHang != null) {
+                    String tenkh = khachHang.getTenkhachhang();
+                    model.addAttribute("tenkh", tenkh);
+                    String sdt = khachHang.getSdt();
+                    model.addAttribute("sdt", sdt);
+                }
+            }
+
+            // Xử lý phân trang cho ChiTietSanPham
+            int size = 5;
+            Page<ChiTieSanPhamCustom> CTSP = chiTietSanPhamService.phanTrang(page, size);
+            model.addAttribute("CTSP", CTSP.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", CTSP.getTotalPages());
+
+            // Lấy danh sách hóa đơn chưa thanh toán
+            List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
+            model.addAttribute("listMaHoaDon", list);
+
+            // Lấy danh sách chi tiết hóa đơn
+            List<ChiTietHoaDonCustom> chiTietHoaDonList = chiTietHoaDonService.findByHoaDonId(UUID.fromString(id));
+            model.addAttribute("chiTietHoaDonList", chiTietHoaDonList);
+
+            return "admin/banhangtaiquay/banhangtaiquay";
         }
 
-        if (idKhachHang != null) {
-            KhachHang khachHang = khachHangRepository.findById(idKhachHang).orElse(null);
-            String tenkh = khachHang.getTenkhachhang();
-            model.addAttribute("tenkh", tenkh);
-            String sdt = khachHang.getSdt();
-            model.addAttribute("sdt", sdt);
+
+
+        @PostMapping("/addCTHD/{ctspid}")
+        public String addCTHD(@RequestParam("ctspid") UUID ctspid,
+                              @RequestParam("soluong1") int soluong,
+                              @RequestParam("idhd") UUID idhd,
+                              RedirectAttributes redirectAttributes,
+                              Model model,
+                              ChiTietHoaDon cthd) {
+            try {
+                ChiTieSanPhamCustom ct = chiTietSanPhamService.getChiTietCustomSanPhamById(ctspid);
+                model.addAttribute("CTSPCustomBHTQ", ct);
+                ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getChiTietSanPhamById(ctspid);
+                List<ChiTietHoaDon> listcthd = chiTietHoaDonService.getKtraTrungCTSP(chiTietSanPham.getId(), idhd);
+
+                model.addAttribute("CTSPCustomBHTQ", ct);
+
+                if (listcthd.size() >= 1) {
+                    redirectAttributes.addFlashAttribute("error", "Sản phẩm đã tồn tại trong giỏ hàng.");
+                    return "redirect:/banhangtaiquay/detailhd/" + idhd;
+                }
+                if (soluong <= 0) {
+                    redirectAttributes.addFlashAttribute("error", "Số lượng phải từ 1 trở lên.");
+                    return "redirect:/banhangtaiquay/detailhd/" + idhd;
+                }
+                if (soluong > chiTietSanPham.getSoluong()) {
+                    redirectAttributes.addFlashAttribute("error", "Số lượng trong kho không đủ.");
+                    return "redirect:/banhangtaiquay/detailhd/" + idhd;
+                }
+
+                cthd.setIdchitietsanpham(ctspid);
+                cthd.setSoluong(soluong);
+                cthd.setIdhoadon(idhd);
+                float dongia = (float) (ct.getGiaBan() * cthd.getSoluong());
+                cthd.setDongia(dongia);
+
+                chiTietSanPham.setSoluong(chiTietSanPham.getSoluong() - cthd.getSoluong());
+                if(chiTietSanPham.getSoluong() == 0){
+                    chiTietSanPham.setTrangthai(0);
+                }
+                chiTietSanPhamService.updateSLSP(chiTietSanPham);
+                chiTietHoaDonService.addCTHD(cthd);
+
+
+                return "redirect:/banhangtaiquay/detailhd/" + idhd;
+            } catch (IllegalArgumentException e) {
+                redirectAttributes.addFlashAttribute("error", "Dữ liệu không hợp lệ.");
+                return "redirect:/banhangtaiquay/detailhd/" + idhd;
+            }
         }
-
-
-        int size = 5;
-        Page<ChiTieSanPhamCustom> CTSP = chiTietSanPhamService.phanTrang(page, size);
-        model.addAttribute("CTSP", CTSP.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", CTSP.getTotalPages());
-        //        List<ChiTieSanPhamCustom> lst = chiTietSanPhamService.getAllCTSP();
-        //        model.addAttribute("lstCTSP",lst);
-        List<HoaDon> list = hoaDonService.getAllHoaDonChuaThanhToan();
-        model.addAttribute("listMaHoaDon", list);
-
-        List<ChiTietHoaDonCustom> chiTietHoaDonList = chiTietHoaDonService.findByHoaDonId(UUID.fromString(id));
-        model.addAttribute("chiTietHoaDonList", chiTietHoaDonList);
-        return "banhangtaiquay";
-    }
-
-
-    @PostMapping("/addCTHD/{id}")
-    public String addCTHD(@PathVariable UUID id, @RequestParam("soluong") int soluong,
-                          @RequestParam("idhd") UUID idhd,
-                          RedirectAttributes redirectAttributes,
-                          Model model, ChiTietHoaDon cthd) {
-        ChiTieSanPhamCustom ct = chiTietSanPhamService.getChiTietCustomSanPhamById(id);
-        ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getChiTietSanPhamById(id);
-        List<ChiTietHoaDon> listcthd = chiTietHoaDonService.getKtraTrungCTSP(chiTietSanPham.getId(), idhd);
-        System.out.println(listcthd.size());
-        try {
-            if (listcthd.size() >= 1) {
-                redirectAttributes.addFlashAttribute("error", "Sản phẩm đã tồn tại trong giỏ hàng .");
-                return "redirect:/banhangtaiquay/detailhd/" + idhd;
-            }
-            if (soluong <= 0) {
-                redirectAttributes.addFlashAttribute("error", "Số lượng phải từ 1 trở lên .");
-                return "redirect:/banhangtaiquay/detailhd/" + idhd;
-            }
-            if (soluong > chiTietSanPham.getSoluong()) {
-                redirectAttributes.addFlashAttribute("error", "Số lượng trong kho không đủ .");
-                return "redirect:/banhangtaiquay/detailhd/" + idhd;
-            }
-        } catch (NumberFormatException e) {
-            redirectAttributes.addFlashAttribute("error", "Số lượng phải là một số nguyên.");
-            return "redirect:/banhangtaiquay/detailhd/" + idhd;
-        }
-
-        cthd.setIdchitietsanpham(id);
-        cthd.setSoluong(soluong);
-        cthd.setIdhoadon(idhd);
-        float dongia = (float) (ct.getGiaBan() * cthd.getSoluong());
-        cthd.setDongia(dongia);
-
-        chiTietSanPham.setSoluong(chiTietSanPham.getSoluong() - cthd.getSoluong());
-        chiTietSanPhamService.updateSLSP(chiTietSanPham);
-//            cthd.setIdhoadon(idHoaDon); // Gán id của hóa đơn
-        chiTietHoaDonService.addCTHD(cthd);
-        return "redirect:/banhangtaiquay/detailhd/" + idhd;
-    }
-
-
-    @GetMapping("/deleteCTHoaDon/{id}")
+        @GetMapping("/deleteCTHoaDon/{id}")
     public String deleteCTHoaDon(@PathVariable("id") String id, @RequestParam("idctsanpham") String idctsanpham) {
         Integer soLuong = chiTietHoaDonService.getSoLuongById(UUID.fromString(id));
         ChiTietSanPham chiTietSanPham = chiTietSanPhamService.getChiTietSanPhamById(UUID.fromString(idctsanpham));
         chiTietSanPham.setSoluong(chiTietSanPham.getSoluong() + soLuong);
+            if(chiTietSanPham.getSoluong() > 0){
+                chiTietSanPham.setTrangthai(1);
+            }
         chiTietSanPhamRepository.save(chiTietSanPham);
         UUID idHoaDon = chiTietHoaDonRepository.findHoaDonIdByChiTietId(UUID.fromString(id));
         chiTietHoaDonRepository.deleteById(UUID.fromString(id));
@@ -249,13 +285,14 @@ import java.util.regex.Pattern;
         return "detailCTSPThemSoLuongCTHD";
     }
 
-    @PostMapping("/xoakhachhang/{id}")
-    public String xoakh(@PathVariable UUID id, Model model) {
-        HoaDon hd = hoaDonService.detailHD(id);
-        hd.setIdkhachhang(null);
-        hoaDonService.updateHoaDon(hd, id);
-        return "redirect:/banhangtaiquay/detailhd/" + id;
-    }
+        @PostMapping("/xoakhachhang/{hoadonId}")
+        public String xoakh(@PathVariable("hoadonId") UUID hoadonId, Model model) {
+            HoaDon hd = hoaDonService.detailHD(hoadonId);
+            hd.setIdkhachhang(null);
+            hoaDonService.updateHoaDon(hd, hoadonId);
+            return "redirect:/banhangtaiquay/detailhd/" + hoadonId;
+        }
+
 
     //check đúng định dạng sdt
     private static final Pattern SDT_PATTERN = Pattern.compile("^[0-9]{10,11}$");
@@ -327,13 +364,12 @@ import java.util.regex.Pattern;
         List<KhachHang> listKhachHang = khachHangService.getALlKhachHanglist();
         model.addAttribute("listKhachHang", listKhachHang);
 
-        return "listKhachHangBHTQ";
+        return "admin/banhangtaiquay/listKhachHangBHTQ";
     }
 
 
     @PostMapping("/addkhachhangvaohd/{id}/{maKhachHang}")
     String addkhachhangvaohd(@PathVariable("id") UUID idHoaDon, @PathVariable("maKhachHang") String maKhachHang) {
-
         KhachHang khachHang = khachHangService.getKhachHangByMakhachhang(maKhachHang);
         System.out.println(khachHang.getMatkhau());
         HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
@@ -379,7 +415,7 @@ import java.util.regex.Pattern;
         List<KhuyenMai> listKhuyenMai = khuyenMaiService.getAllKhuyenMailist();
         model.addAttribute("listKhuyenMai", listKhuyenMai);
 
-        return "listKhuyenMaiBHTQ";
+        return "admin/banhangtaiquay/listKhuyenMaiBHTQ";
     }
 
     @PostMapping("/addkhuyenmaivaohd/{id}/{idkhuyenmai}")
@@ -426,6 +462,8 @@ import java.util.regex.Pattern;
 
     ) {
         HoaDon hoaDon = hoaDonService.detailHD(idHoaDon);
+        List<ChiTietHoaDonCustom> chiTietHoaDonList = chiTietHoaDonService.findByHoaDonId(idHoaDon);
+
         if (tienkhachduaStr.equals("0")) {
             redirectAttributes.addFlashAttribute("error", "khong duoc de trong tien khach dua.");
             return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
@@ -433,10 +471,16 @@ import java.util.regex.Pattern;
         if (tienthuaStr.equals("0")) {
             redirectAttributes.addFlashAttribute("error", "khong duoc de trong tien thua.");
             return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
-        } else {
+        }
+        if (chiTietHoaDonList.size() <= 0) {
+            redirectAttributes.addFlashAttribute("error", " Không có sản phẩm trong giỏ hàng .");
+            return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
+        }
+        else {
             hoaDon.setThanhtien(thanhtien);
             hoaDon.setTrangthai(1);
             hoaDonRepository.save(hoaDon);
+            redirectAttributes.addFlashAttribute("thanhcong","thanh toan thanh cong");
             return "redirect:/banhangtaiquay/hienthi";
         }
     }
@@ -448,6 +492,7 @@ import java.util.regex.Pattern;
                                   @RequestParam("thanhtien") Float thanhtien,
                                   Model model,
                                   RedirectAttributes redirectAttributes) {
+
 
         // Kiểm tra xem tienkhachduaStr có chứa số hợp lệ không
         if (!tienkhachduaStr.matches("^\\d*\\.?\\d+$")) {
@@ -474,6 +519,7 @@ import java.util.regex.Pattern;
         // Lưu giá trị vào flash attribute
         redirectAttributes.addFlashAttribute("tienkhachdua", tienkhachdua);
         redirectAttributes.addFlashAttribute("tienthua", tienthua);
+
 
         return "redirect:/banhangtaiquay/detailhd/" + idHoaDon;
     }
